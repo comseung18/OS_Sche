@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html style="height : 100%; margin-left: 5%;margin-right: 5%;">
+    <head>
+
+        <!--<script src="js/jquery.min.js"></script>-->
+        <!--<script src="js/bootstrap.min.js"></script>-->
+        <script src="vue.min.js"></script>
+        
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <style>
+            
+            body
+            {
+                margin: 0 auto;
+                height: 100%;
+            }
+            #app
+            {
+                width: 100%;
+                height: 90%;
+                border : 1px solid black;
+            }
+
+            #top
+            {
+                height: 30%;
+                border-top: 1px solid black;
+            }
+
+            #left_top
+            {
+                width: 35%;
+                border-right: 1px solid black;
+                border-bottom: 1px solid black;
+                margin-right: 0;
+                float: left;
+                height: 100%;
+            }
+            #left_top input
+            {
+                width: 70%;
+                text-align: center;
+                margin-left: 0;
+            }
+            #left_top select
+            {
+                text-align: center;
+                width: 70%;
+            }
+            #process_add_btn
+            {
+                float: right;
+                width: 70%;
+            }
+
+            #right_top
+            {
+                width: 65%;
+                border-bottom: 1px solid black;
+                float: left;
+                height: 100%;
+                overflow-y: scroll;
+            }
+
+            #process_table
+            {
+            }
+
+            hr
+            {
+                margin: 3px;
+                background-color: black;
+            }
+
+            input[type=number]::-webkit-inner-spin-button, 
+            input[type=number]::-webkit-outer-spin-button {  
+
+                opacity: 1;
+
+            }
+            #ready_queue
+            {
+                height: 80%;
+                margin-top: 5%;
+                border: 1px solid red;
+            }
+        
+        </style>
+    </head>
+    <body>
+        <br>
+        <br>
+        <div id="app">
+            <br>
+            <br>
+            <div id="top">
+                <div id="left_top">
+                    <label for="schedule_algorithm" style="margin-top: 3px">알고리즘</label>
+                    <select name="schedule_algorithm" id="schedule_algorithm" v-model="algorithm">
+                        <option value="FCFS">FCFS</option>
+                        <option value="RR">RR</option>
+                    </select>
+                    <br>
+                    <label for="quantum_time" v-if="algorithm=='RR'">퀀텀&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                    <input type="number" name="quantum_time" v-model="quantum_time" v-if="algorithm=='RR'"/>
+                    <br v-if="algorithm=='RR'">
+                    <label for="arrival_time">도착시간</label>
+                    <input type="number" name="arrival_time" v-model="arrival_time"/>
+                    <br>
+                    <label for="burst_time">실행시간</label>
+                    <input type="number" name="burst_time" v-model="burst_time">
+                    <br>
+                    <button id="process_add_btn" @click="process_add">ADD</button>
+                    <br>
+                    <br>
+                    <hr>
+                    <label for="total_cores">전체코어</label>
+                    <input type="number" placeholder="Total Cores" style="text-align: center;" name="total_cores" ><br>
+
+                    <label for="e_cores">E코어&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                    <input type="number" placeholder="E Cores" style="text-align: center;" name="e_cores">
+                </div>
+                <div id="right_top">
+                    
+                    <table class="table table-bordered table-hover" id="process_table">
+                        <thead>
+                            <tr>
+                                <th>프로세스 이름</th>
+                                <th>도착시간</th>
+                                <th>실행시간</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(p, index) in sorted_process_list">
+                                <td>P{{index}}</td>
+                                <td>{{p.arrival_time}}</td>
+                                <td>{{p.burst_time}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                </div>
+            </div>
+            <div style="width: 100%; height: 60%;">
+            <div style="width: 30%; height: 20%; margin:5%">
+                
+            </div>
+            <div style="width: 30%; height: 20%;">
+            
+            </div>
+            <div style="width: 30%;height: 20%;">
+            
+            </div>
+        </div>
+        </div>
+    </body>
+    <script src="main.js"></script>
+</html>
