@@ -1,157 +1,261 @@
 <!DOCTYPE html>
-<html style="height : 100%; margin-left: 5%;margin-right: 5%;">
+<html>
     <head>
 
-        <!--<script src="js/jquery.min.js"></script>-->
-        <!--<script src="js/bootstrap.min.js"></script>-->
+        <script src="jquery.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
         <script src="vue.min.js"></script>
         
         <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="main_frame.css">
+        <link rel="stylesheet" href="header.css">
+        <link rel="stylesheet" href="middle_left.css">
+        <link rel="stylesheet" href="middle_right.css">
+        <link rel="stylesheet" href="bottom_ready_queue.css">
+        <link rel="stylesheet" href="bottom_result.css">
         <style>
-            
-            body
+            /* div
             {
-                margin: 0 auto;
-                height: 100%;
-            }
+                border: 1px solid black;
+            } */
             #app
             {
-                width: 100%;
-                height: 90%;
-                border : 1px solid black;
+                border: 3px solid black;
             }
-
-            #top
-            {
-                height: 30%;
-                border-top: 1px solid black;
-            }
-
-            #left_top
-            {
-                width: 35%;
-                border-right: 1px solid black;
-                border-bottom: 1px solid black;
-                margin-right: 0;
-                float: left;
-                height: 100%;
-            }
-            #left_top input
-            {
-                width: 70%;
-                text-align: center;
-                margin-left: 0;
-            }
-            #left_top select
-            {
-                text-align: center;
-                width: 70%;
-            }
-            #process_add_btn
-            {
-                float: right;
-                width: 70%;
-            }
-
-            #right_top
-            {
-                width: 65%;
-                border-bottom: 1px solid black;
-                float: left;
-                height: 100%;
-                overflow-y: scroll;
-            }
-
-            #process_table
-            {
-            }
-
-            hr
-            {
-                margin: 3px;
-                background-color: black;
-            }
-
-            input[type=number]::-webkit-inner-spin-button, 
-            input[type=number]::-webkit-outer-spin-button {  
-
-                opacity: 1;
-
-            }
-            #ready_queue
-            {
-                height: 80%;
-                margin-top: 5%;
-                border: 1px solid red;
-            }
-        
         </style>
     </head>
     <body>
-        <br>
-        <br>
         <div id="app">
-            <br>
-            <br>
-            <div id="top">
-                <div id="left_top">
-                    <label for="schedule_algorithm" style="margin-top: 3px">알고리즘</label>
-                    <select name="schedule_algorithm" id="schedule_algorithm" v-model="algorithm">
-                        <option value="FCFS">FCFS</option>
-                        <option value="RR">RR</option>
-                    </select>
-                    <br>
-                    <label for="quantum_time" v-if="algorithm=='RR'">퀀텀&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                    <input type="number" name="quantum_time" v-model="quantum_time" v-if="algorithm=='RR'"/>
-                    <br v-if="algorithm=='RR'">
-                    <label for="arrival_time">도착시간</label>
-                    <input type="number" name="arrival_time" v-model="arrival_time"/>
-                    <br>
-                    <label for="burst_time">실행시간</label>
-                    <input type="number" name="burst_time" v-model="burst_time">
-                    <br>
-                    <button id="process_add_btn" @click="process_add">ADD</button>
-                    <br>
-                    <br>
-                    <hr>
-                    <label for="total_cores">전체코어</label>
-                    <input type="number" placeholder="Total Cores" style="text-align: center;" name="total_cores" ><br>
+            <div id="header">
+                <button type="button" class="btn btn-success" id="btn_program_start">Start!</button>
+                <button type="button" class="btn btn-danger" id="btn_program_reset">RESET</button>
 
-                    <label for="e_cores">E코어&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                    <input type="number" placeholder="E Cores" style="text-align: center;" name="e_cores">
+                <form class="form-floating" id="p_cores_form">
+                    <input type="number" class="form-control" id="p_cores" value="1"/>
+                    <label for="p_cores">P Cores</label>
+                </form>
+                <form class="form-floating" id="total_cores_form">
+                    <input type="number" class="form-control" id="total_cores" value="1"/>
+                    <label for="total_cores">Total Cores</label>
+                </form>
+                <form class="form-floating" id="quantum_time_form">
+                    <input type="number" class="form-control" id="quantum_time_cores" value="1"/>
+                    <label for="quantum_time_cores">Quantum Time</label>
+                </form>
+                <div class="form-floating" id="algorithm_div">
+                    <select class="form-select" id="algorithm_floatingSelect">
+                      <option value="FCFS">FCFS</option>
+                      <option value="RR">RR</option>
+                    </select>
+                    <label for="algorithm_floatingSelect">Algorithm</label>
                 </div>
-                <div id="right_top">
-                    
-                    <table class="table table-bordered table-hover" id="process_table">
+            </div>
+
+            <div id="middle">
+                <div id="middle-left">
+                    <form class="form-floating" id="arrive_time_form">
+                        <input type="number" class="form-control" id="arrive_time" value="1"/>
+                        <label for="arrive_time">Arrive Time</label>
+                    </form>
+                    <form class="form-floating" id="burst_time_form">
+                        <input type="number" class="form-control" id="burst_time" value="1"/>
+                        <label for="burst_time">Burst Time</label>
+                    </form>
+                      <button type="button" class="btn btn-dark" id="process_add_btn">Process Add</button>
+                      
+                </div>
+                <div id="middle-right">
+                    <table class="table table-light table-striped" id="process_schedule_table">
                         <thead>
                             <tr>
-                                <th>프로세스 이름</th>
-                                <th>도착시간</th>
-                                <th>실행시간</th>
+                                <th>Process Name</th>
+                                <th>Arrival Time</th>
+                                <th>Burst Time</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(p, index) in sorted_process_list">
-                                <td>P{{index}}</td>
-                                <td>{{p.arrival_time}}</td>
-                                <td>{{p.burst_time}}</td>
+                            <tr>
+                                <td>P1</td>
+                                <td>1</td>
+                                <td>3</td>
+                            </tr>
+                            <tr>
+                                <td>P1</td>
+                                <td>1</td>
+                                <td>3</td>
+                            </tr>
+                            <tr>
+                                <td>P1</td>
+                                <td>1</td>
+                                <td>3</td>
+                            </tr>
+                            <tr>
+                                <td>P1</td>
+                                <td>1</td>
+                                <td>3</td>
+                            </tr>
+                            <tr>
+                                <td>P1</td>
+                                <td>1</td>
+                                <td>3</td>
+                            </tr>
+                            <tr>
+                                <td>P1</td>
+                                <td>1</td>
+                                <td>3</td>
+                            </tr>
+                            <tr>
+                                <td>P1</td>
+                                <td>1</td>
+                                <td>3</td>
+                            </tr>
+                            <tr>
+                                <td>P1</td>
+                                <td>1</td>
+                                <td>3</td>
+                            </tr>
+                            <tr>
+                                <td>P1</td>
+                                <td>1</td>
+                                <td>3</td>
+                            </tr>
+                            <tr>
+                                <td>P1</td>
+                                <td>1</td>
+                                <td>3</td>
+                            </tr>
+                            <tr>
+                                <td>P1</td>
+                                <td>1</td>
+                                <td>3</td>
+                            </tr>
+                            <tr>
+                                <td>P1</td>
+                                <td>1</td>
+                                <td>3</td>
+                            </tr>
+                            <tr>
+                                <td>P1</td>
+                                <td>1</td>
+                                <td>3</td>
+                            </tr>
+                            <tr>
+                                <td>P1</td>
+                                <td>1</td>
+                                <td>3</td>
                             </tr>
                         </tbody>
                     </table>
-                    
                 </div>
             </div>
-            <div style="width: 100%; height: 60%;">
-            <div style="width: 30%; height: 20%; margin:5%">
-                
+            <div id="bottom">
+                <div id="bottom-ready-queue">
+
+                    <div id="time-slider">
+                        <label for="cpu-time" class="form-label"><strong>Time : 0</strong></label>
+                        <input type="range" class="form-range" min="0" max="16" id="cpu-time">
+                    </div>
+                    <div id="ready-queue">
+                        <p><strong>&lt;Ready Queue&gt;</strong></p>
+                        <div class="process_in_queue">
+                            <span>P1</span>
+                        </div>
+                        <div class="process_in_queue">
+                            <span>P2</span>
+                        </div>
+                        <div class="process_in_queue">
+                            <span>P3</span></div>
+                        <div class="process_in_queue" >
+                            <span>P4</span></div>
+                        <div class="process_in_queue">
+                            <span>P5</span>
+                        </div>
+                        <div class="process_in_queue">
+                            <span>P6</span></div>
+                        <div class="process_in_queue">
+                            <span>P7</span></div>
+                        <div class="process_in_queue">
+                            <span>P8</span></div>
+                        <div class="process_in_queue">
+                            <span>P9</span>
+                        </div>
+                        <div class="process_in_queue">
+                            <span>P10</span></div>
+                        <div class="process_in_queue">
+                            <span>P11</span></div>
+                        <div class="process_in_queue">
+                            <span>P12</span></div>
+                        <div class="process_in_queue">
+                            <span>P13</span></div>
+                    </div>
+
+                </div>
+                <div id="bottom-gantt-chart">
+
+                </div>
+                <div id="bottom-result-table">
+                    <table class="table table-light table-striped" id="result_table">
+                        <thead>
+                            <tr>
+                                <th>Process Name</th>
+                                <th>Arrival Time(AT)</th>
+                                <th>Burst Time(BT)</th>
+                                <th>Waiting Time(WT)</th>
+                                <th>Turnarount Time(TT)</th>
+                                <th>Normalized TT(NTT)</th>
+                                <th>Power Consumption</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>P0</td>
+                                <td>0</td>
+                                <td>1</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>1</td>
+                            </tr>
+                            <tr>
+                                <td>P0</td>
+                                <td>0</td>
+                                <td>1</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>1</td>
+                            </tr>
+                            <tr>
+                                <td>P0</td>
+                                <td>0</td>
+                                <td>1</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>1</td>
+                            </tr>
+                            <tr>
+                                <td>P0</td>
+                                <td>0</td>
+                                <td>1</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>1</td>
+                            </tr>
+                            <tr>
+                                <td>P0</td>
+                                <td>0</td>
+                                <td>1</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>1</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-            <div style="width: 30%; height: 20%;">
-            
-            </div>
-            <div style="width: 30%;height: 20%;">
-            
-            </div>
-        </div>
         </div>
     </body>
     <script src="main.js"></script>

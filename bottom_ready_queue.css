@@ -1,0 +1,34 @@
+#time-slider
+{
+    height: 40%;
+    width: 100%;
+    overflow-y: scroll;
+}
+
+#ready-queue
+{
+    width: 100%;
+    height: 60%;
+    overflow: hidden;
+}
+
+#ready-queue p
+{
+    position: absolute;
+}
+
+.process_in_queue
+{
+    width: 8%;
+    height: 100%;
+    float: left;
+    text-align: center;
+    border: 1px solid black;
+}
+
+.process_in_queue span
+{
+    font-weight: bold;
+    position: relative;
+    top: 40%;
+}

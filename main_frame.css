@@ -1,0 +1,70 @@
+html
+{
+    height: 100%;
+    width: 100%;
+    padding-left: 5%;
+    padding-right: 5%;
+}
+
+body
+{
+    position: relative;
+    width: 100%;
+    height: 80%;
+    top:10%;
+}
+
+#app
+{
+    width: 100%;
+    height: 100%;
+}
+
+#header
+{
+    width: 100%;
+    height: 10%;
+    border-bottom: 3px solid black;
+}
+
+#middle
+{
+    width: 100%;
+    height: 30%;
+}
+
+#bottom
+{
+    width: 100%;
+    height: 60%;
+}
+
+#middle-left
+{
+    width: 30%;
+    height: 100%;
+    float: left;
+}
+#middle-right
+{
+    width: 70%;
+    height: 100%;
+    float: left;
+    overflow-y: scroll;
+}
+#bottom-ready-queue
+{
+    width: 100%;
+    height: 33%;
+}
+#bottom-gantt-chart
+{
+    width: 100%;
+    height: 33%;
+}
+#bottom-result-table
+{
+    width: 100%;
+    height: 34%;
+    overflow-y: scroll;
+}   

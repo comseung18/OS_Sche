@@ -1,0 +1,12 @@
+#result_table
+{
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    border-collapse: collapse;
+}
+#result_table th
+{
+    position: sticky;
+    top: 0px;
+}

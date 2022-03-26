@@ -1,0 +1,62 @@
+#btn_program_start
+{
+    height: 100%;
+    width: 25%;
+}
+#btn_program_reset
+{
+    height: 100%;
+    width: 10%;
+}
+
+#algorithm_div
+{
+    width: 15%;
+    height: 100%;
+    float: right;
+}
+
+#algorithm_div select
+{
+    text-align: center;
+    height: 100%;
+}
+
+#total_cores_form
+{
+    width: 15%;
+    height: 100%;
+    float: right;
+}
+
+#total_cores_form input
+{
+    height: 100%;
+    text-align: center;
+}
+
+#p_cores_form
+{
+    width: 15%;
+    height: 100%;
+    float: right;
+}
+
+#p_cores_form input
+{
+    height: 100%;
+    text-align: center;
+}
+
+#quantum_time_form
+{
+    width: 15%;
+    height: 100%;
+    float: right;
+}
+
+#quantum_time_form input
+{
+    height: 100%;
+    text-align: center;
+}
