@@ -10,3 +10,9 @@
     position: sticky;
     top: 0px;
 }
+
+#result_table tr > td:nth-child(1)
+{
+    color: white;
+    font-weight: bold;
+}

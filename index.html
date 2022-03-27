@@ -2,17 +2,17 @@
 <html>
     <head>
 
-        <script src="jquery.min.js"></script>
-        <script src="js/bootstrap.min.js"></script>
-        <script src="vue.min.js"></script>
+        <script src="js/jquery.min.js"></script>
+        <script src="bootstrap/js/bootstrap.min.js"></script>
+        <script src="js/vue.min.js"></script>
         
-        <link rel="stylesheet" href="css/bootstrap.min.css">
-        <link rel="stylesheet" href="main_frame.css">
-        <link rel="stylesheet" href="header.css">
-        <link rel="stylesheet" href="middle_left.css">
-        <link rel="stylesheet" href="middle_right.css">
-        <link rel="stylesheet" href="bottom_ready_queue.css">
-        <link rel="stylesheet" href="bottom_result.css">
+        <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/main_frame.css">
+        <link rel="stylesheet" href="css/header.css">
+        <link rel="stylesheet" href="css/middle_left.css">
+        <link rel="stylesheet" href="css/middle_right.css">
+        <link rel="stylesheet" href="css/bottom_ready_queue.css">
+        <link rel="stylesheet" href="css/bottom_result.css">
         <style>
             /* div
             {
@@ -27,23 +27,25 @@
     <body>
         <div id="app">
             <div id="header">
-                <button type="button" class="btn btn-success" id="btn_program_start">Start!</button>
-                <button type="button" class="btn btn-danger" id="btn_program_reset">RESET</button>
+                <button type="button" class="btn" :class="{'btn-success': !running, 'btn-warning' : running}" id="btn_program_start" @click="start_btn_clicked">
+                    {{ !running ? "Start!" : "Pause!" }}
+                </button>
+                <button type="button" class="btn btn-danger" id="btn_program_reset" @click="reset">RESET</button>
 
                 <form class="form-floating" id="p_cores_form">
-                    <input type="number" class="form-control" id="p_cores" value="1"/>
+                    <input type="number" class="form-control" id="p_cores" v-model="p_cores" min="0" :max="total_cores"/>
                     <label for="p_cores">P Cores</label>
                 </form>
                 <form class="form-floating" id="total_cores_form">
-                    <input type="number" class="form-control" id="total_cores" value="1"/>
+                    <input type="number" class="form-control" id="total_cores" v-model="total_cores" min="1"/>
                     <label for="total_cores">Total Cores</label>
                 </form>
                 <form class="form-floating" id="quantum_time_form">
-                    <input type="number" class="form-control" id="quantum_time_cores" value="1"/>
+                    <input type="number" class="form-control" id="quantum_time_cores" v-model="quantum_time" :disabled="algorithm != 'RR'" min="1"/>
                     <label for="quantum_time_cores">Quantum Time</label>
                 </form>
                 <div class="form-floating" id="algorithm_div">
-                    <select class="form-select" id="algorithm_floatingSelect">
+                    <select class="form-select" id="algorithm_floatingSelect" v-model="algorithm">
                       <option value="FCFS">FCFS</option>
                       <option value="RR">RR</option>
                     </select>
@@ -53,96 +55,50 @@
 
             <div id="middle">
                 <div id="middle-left">
+
                     <form class="form-floating" id="arrive_time_form">
-                        <input type="number" class="form-control" id="arrive_time" value="1"/>
+                        <input type="number" class="form-control" id="arrive_time" v-model="arrival_time" min="0"/>
                         <label for="arrive_time">Arrive Time</label>
                     </form>
                     <form class="form-floating" id="burst_time_form">
-                        <input type="number" class="form-control" id="burst_time" value="1"/>
+                        <input type="number" class="form-control" id="burst_time" v-model="burst_time" min="1"/>
                         <label for="burst_time">Burst Time</label>
                     </form>
-                      <button type="button" class="btn btn-dark" id="process_add_btn">Process Add</button>
+                      <button type="button" class="btn btn-dark" id="process_add_btn" @click="process_add">Process Add</button>
                       
                 </div>
                 <div id="middle-right">
-                    <table class="table table-light table-striped" id="process_schedule_table">
+                    <table class="table table-light" id="process_schedule_table">
                         <thead>
                             <tr>
-                                <th>Process Name</th>
-                                <th>Arrival Time</th>
-                                <th>Burst Time</th>
+                                <th class="col-3">Process Name</th>
+                                <th class="col-4">Arrival Time</th>
+                                <th class="col-4">Burst Time</th>
+                                <th class="col-1">
+                                    <button id="process_table_remove_btn" type="button" class="btn btn-danger" @click="only_table_reset">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2v1z"/>
+                                            <path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466z"/>
+                                        </svg>
+                                    </button>
+                                </th>
+
                             </tr>
+                            
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>P1</td>
-                                <td>1</td>
-                                <td>3</td>
-                            </tr>
-                            <tr>
-                                <td>P1</td>
-                                <td>1</td>
-                                <td>3</td>
-                            </tr>
-                            <tr>
-                                <td>P1</td>
-                                <td>1</td>
-                                <td>3</td>
-                            </tr>
-                            <tr>
-                                <td>P1</td>
-                                <td>1</td>
-                                <td>3</td>
-                            </tr>
-                            <tr>
-                                <td>P1</td>
-                                <td>1</td>
-                                <td>3</td>
-                            </tr>
-                            <tr>
-                                <td>P1</td>
-                                <td>1</td>
-                                <td>3</td>
-                            </tr>
-                            <tr>
-                                <td>P1</td>
-                                <td>1</td>
-                                <td>3</td>
-                            </tr>
-                            <tr>
-                                <td>P1</td>
-                                <td>1</td>
-                                <td>3</td>
-                            </tr>
-                            <tr>
-                                <td>P1</td>
-                                <td>1</td>
-                                <td>3</td>
-                            </tr>
-                            <tr>
-                                <td>P1</td>
-                                <td>1</td>
-                                <td>3</td>
-                            </tr>
-                            <tr>
-                                <td>P1</td>
-                                <td>1</td>
-                                <td>3</td>
-                            </tr>
-                            <tr>
-                                <td>P1</td>
-                                <td>1</td>
-                                <td>3</td>
-                            </tr>
-                            <tr>
-                                <td>P1</td>
-                                <td>1</td>
-                                <td>3</td>
-                            </tr>
-                            <tr>
-                                <td>P1</td>
-                                <td>1</td>
-                                <td>3</td>
+                            <tr v-for="(process, index) in processes">
+                                <td :style="{backgroundColor: process.color}">P{{index+1}}</td>
+                                <td>{{process.arrival_time}}</td>
+                                <td>{{process.burst_time}}</td>
+                                <td> 
+                                    <button type="button" class="btn btn-secondary" @click="process_table_process_remove(index)">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
+                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                            <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                                          </svg>
+                                    </button>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -152,8 +108,8 @@
                 <div id="bottom-ready-queue">
 
                     <div id="time-slider">
-                        <label for="cpu-time" class="form-label"><strong>Time : 0</strong></label>
-                        <input type="range" class="form-range" min="0" max="16" id="cpu-time">
+                        <label for="cpu-time" class="form-label"><strong>Time : {{time}}</strong></label>
+                        <input type="range" class="form-range" min="0" :max="max_time" id="cpu-time" v-model="time">
                     </div>
                     <div id="ready-queue">
                         <p><strong>&lt;Ready Queue&gt;</strong></p>
@@ -193,64 +149,30 @@
                 <div id="bottom-gantt-chart">
 
                 </div>
+
+
                 <div id="bottom-result-table">
-                    <table class="table table-light table-striped" id="result_table">
+                    <table class="table table-light" id="result_table">
                         <thead>
                             <tr>
                                 <th>Process Name</th>
                                 <th>Arrival Time(AT)</th>
                                 <th>Burst Time(BT)</th>
                                 <th>Waiting Time(WT)</th>
-                                <th>Turnarount Time(TT)</th>
+                                <th>Turnaround Time(TT)</th>
                                 <th>Normalized TT(NTT)</th>
                                 <th>Power Consumption</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>P0</td>
-                                <td>0</td>
-                                <td>1</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>1</td>
-                            </tr>
-                            <tr>
-                                <td>P0</td>
-                                <td>0</td>
-                                <td>1</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>1</td>
-                            </tr>
-                            <tr>
-                                <td>P0</td>
-                                <td>0</td>
-                                <td>1</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>1</td>
-                            </tr>
-                            <tr>
-                                <td>P0</td>
-                                <td>0</td>
-                                <td>1</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>1</td>
-                            </tr>
-                            <tr>
-                                <td>P0</td>
-                                <td>0</td>
-                                <td>1</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>1</td>
+                            <tr v-for="(process, index) in processes">
+                                <td :style="{backgroundColor : process.color}">P{{index+1}}</td>
+                                <td>{{process.arrival_time}}</td>
+                                <td>{{process.burst_time}}</td>
+                                <td>{{process.turnaround_time != -1? process.turnaround_time - process.burst_time : '-'}}</td>
+                                <td>{{process.turnaround_time != -1? process.turnaround_time : '-'}}</td>
+                                <td>{{process.turnaround_time != -1? process.turnaround_time / process.burst_time : '-'}}</td>
+                                <td>{{process.power_consumption}}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -258,5 +180,5 @@
             </div>
         </div>
     </body>
-    <script src="main.js"></script>
+    <script src="js/main.js"></script>
 </html>
