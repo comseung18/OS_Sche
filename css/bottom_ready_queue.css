@@ -7,6 +7,9 @@
 #time-slider label
 {
     margin-bottom: -8px;
+}
+#time-slider input
+{
     margin-top: -10%;
 }
 
