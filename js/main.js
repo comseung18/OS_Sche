@@ -26,7 +26,7 @@ class Process
     }
 }
 
-var app = new Vue({
+const app = new Vue({
     el : "#app",
     data:{
         max_time : 0,
