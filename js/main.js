@@ -29,7 +29,7 @@ class Process
 var app = new Vue({
     el : "#app",
     data:{
-        max_time : 16,
+        max_time : 0,
 
 
         algorithm : 'FCFS',
@@ -74,7 +74,17 @@ var app = new Vue({
 
         run()
         {
+            this.time = Number(this.time);
+            if(this.time >= this.max_time)
+            {
+                this.running = false;
+                clearInterval(this.run_timer);
+                return;
+            }
+
+            
             this.time += 1;
+            
         },
 
         reset()
@@ -110,7 +120,7 @@ var app = new Vue({
         {
             if(this.running) return;
 
-            this.processes.push(new Process(this.arrival_time, this.burst_time));
+            this.processes.push(new Process(Number(this.arrival_time), Number(this.burst_time)));
             this.arrival_time = 0;
             this.burst_time = 1;
             this.processes.sort(compare_process_arrival_time);
