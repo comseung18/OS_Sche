@@ -89,7 +89,7 @@
                         </thead>
                         <tbody>
                             <tr v-for="(process, index) in processes">
-                                <td :style="{backgroundColor: process.color}">P{{index+1}}</td>
+                                <td :style="{backgroundColor: process.color, color:process.complement_color}">P{{index+1}}</td>
                                 <td>{{process.arrival_time}}</td>
                                 <td>{{process.burst_time}}</td>
                                 <td> 
@@ -167,7 +167,7 @@
                         </thead>
                         <tbody>
                             <tr v-for="(process, index) in processes">
-                                <td :style="{backgroundColor : process.color}">P{{index+1}}</td>
+                                <td :style="{backgroundColor: process.color, color:process.complement_color}">P{{index+1}}</td>
                                 <td>{{process.arrival_time}}</td>
                                 <td>{{process.burst_time}}</td>
                                 <td>{{process.turnaround_time != -1? process.turnaround_time - process.burst_time : '-'}}</td>

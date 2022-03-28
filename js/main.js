@@ -7,11 +7,17 @@ function compare_process_arrival_time(p1, p2)
     return 1;
 }
 
-function generateLightColorHex() {
+function generate_random_color() {
     let color = "#";
     for (let i = 0; i < 3; i++)
       color += ("0" + Math.floor(((1 + Math.random()) * Math.pow(16, 2)) / 2).toString(16)).slice(-2);
     return color;
+}
+
+function cal_complement_color(color)
+{
+    let complement = 0xffffff ^ Number("0x" + color.substr(1));
+    return "#" + complement.toString(16);
 }
 
 class Process
@@ -22,7 +28,8 @@ class Process
         this.burst_time = burst_time;
         this.turnaround_time = -1;
         this.power_consumption = 0;
-        this.color = generateLightColorHex();
+        this.color = generate_random_color();
+        this.complement_color = cal_complement_color(this.color);
     }
 }
 
