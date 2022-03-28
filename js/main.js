@@ -16,8 +16,11 @@ function generate_random_color() {
 
 function cal_complement_color(color)
 {
-    let complement = 0xffffff ^ Number("0x" + color.substr(1));
-    return "#" + complement.toString(16);
+    
+    let complement = 0xffffff ^ parseInt(color.substr(1), 16);
+    complement = complement.toString(16);
+    while(complement.length < 6) complement = "0" + complement;
+    return "#" + complement;
 }
 
 class Process
