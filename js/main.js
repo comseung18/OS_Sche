@@ -26,7 +26,7 @@ function cal_complement_color(color)
     return "#" + complement;
 }
 
-// 프로세스에 대해 추상화한 함수
+// 프로세스에 대해 추상화
 class Process
 {
     constructor(arrival_time, burst_time)
