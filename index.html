@@ -5,7 +5,21 @@
         <title>프로세스 스케쥴링 시뮬레이터</title>
         <script src="js/jquery.min.js"></script>
         <script src="bootstrap/js/bootstrap.min.js"></script>
+
+        <script src="js/core.js"></script>
+        <script src="js/p_core.js"></script>
+        <script src="js/e_core.js"></script>
+
+        <script src="js/ready_queue.js"></script>
+        <script src="js/fcfs_ready_queue.js"></script>
+
+        <script src="js/schedule.js"></script>
+        <script src="js/fcfs_schdule.js"></script>
+
+
+
         <script src="js/vue.min.js"></script>
+        
         
         <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
         <link rel="stylesheet" href="css/main_frame.css">
@@ -27,9 +41,10 @@
     </head>
     <body>
         <div id="app">
+            
             <div id="header">
-                <button type="button" class="btn" :class="{'btn-success': !running, 'btn-warning' : running}" id="btn_program_start" @click="start_btn_clicked">
-                    {{ !running ? "Start!" : "Pause!" }}
+                <button type="button" class="btn btn-success" id="btn_program_start" @click="start_btn_clicked">
+                    {{ program_state }}
                 </button>
                 <button type="button" class="btn btn-danger" id="btn_program_reset" @click="reset">RESET</button>
 
@@ -88,8 +103,8 @@
                             
                         </thead>
                         <tbody>
-                            <tr v-for="(process, index) in processes">
-                                <td :style="{backgroundColor: process.color, color:process.complement_color}">P{{index+1}}</td>
+                            <tr v-for="process in processes">
+                                <td :style="{backgroundColor: process.color, color:process.complement_color}">{{process.name}}</td>
                                 <td>{{process.arrival_time}}</td>
                                 <td>{{process.burst_time}}</td>
                                 <td> 
@@ -114,36 +129,10 @@
                     </div>
                     <div id="ready-queue">
                         <p><strong>&lt;Ready Queue&gt;</strong></p>
-                        <div class="process_in_queue">
-                            <span>P1</span>
+                        <div v-if="scheduler && scheduler.ready_queue" v-for="process in scheduler.ready_queue.list()" class="process_in_queue"
+                        :style="{backgroundColor: process.color, color:process.complement_color}">
+                            <span>{{process.name}}</span>
                         </div>
-                        <div class="process_in_queue">
-                            <span>P2</span>
-                        </div>
-                        <div class="process_in_queue">
-                            <span>P3</span></div>
-                        <div class="process_in_queue" >
-                            <span>P4</span></div>
-                        <div class="process_in_queue">
-                            <span>P5</span>
-                        </div>
-                        <div class="process_in_queue">
-                            <span>P6</span></div>
-                        <div class="process_in_queue">
-                            <span>P7</span></div>
-                        <div class="process_in_queue">
-                            <span>P8</span></div>
-                        <div class="process_in_queue">
-                            <span>P9</span>
-                        </div>
-                        <div class="process_in_queue">
-                            <span>P10</span></div>
-                        <div class="process_in_queue">
-                            <span>P11</span></div>
-                        <div class="process_in_queue">
-                            <span>P12</span></div>
-                        <div class="process_in_queue">
-                            <span>P13</span></div>
                     </div>
 
                 </div>
@@ -166,8 +155,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(process, index) in processes">
-                                <td :style="{backgroundColor: process.color, color:process.complement_color}">P{{index+1}}</td>
+                            <tr v-for="process in processes">
+                                <td :style="{backgroundColor: process.color, color:process.complement_color}">{{process.name}}</td>
                                 <td>{{process.arrival_time}}</td>
                                 <td>{{process.burst_time}}</td>
                                 <td>{{process.turnaround_time != -1? process.turnaround_time - process.burst_time : '-'}}</td>
