@@ -84,7 +84,7 @@ function generate_random_color() {
 // '#******' 형태의 색상에 대하여 보색을 구하여 '#******' 의 꼴로 반환하는 함수
 function cal_complement_color(color)
 {
-    
+    return "#000000";
     let complement = 0xffffff ^ parseInt(color.substr(1), 16);
     complement = complement.toString(16);
     while(complement.length < 6) complement = "0" + complement;
