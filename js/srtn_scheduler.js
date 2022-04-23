@@ -13,14 +13,24 @@ class SrtnScheduler extends Scheduler
         // 코어가 일하는 중일 때도 우선순위큐의 최상위 프로세스가
         // 더 짧은 남은 실행시간을 가질경우 그 코어에 그 프로세스를 선점한다.
         
+        // 만약 일하고 있지 않은 PCore 가 존재하면 ECore 의 일을 PCore 에 준다.
+        
+        let exist_empty_p_core = false;
         for(let i=0;i<this.cores.length;++i)
         {
             let core = this.cores[i];
-           //  if(this.ready_queue.empty() || (core.has_process() &&  this.ready_queue.peek().remain_time <= core.process.remain_time))
-           //  {
-                if(core.has_process())
-                    this.ready_queue.push(core.quit());
-          //   }
+            if(!core.has_process())
+            {
+                if(core instanceof PCore) exist_empty_p_core = true;
+            }
+            else if(!this.ready_queue.empty() && this.ready_queue.peek().remain_time < core.process.remain_time)
+            {
+                this.ready_queue.push(core.quit());
+            }
+            else if(exist_empty_p_core && core instanceof ECore)
+            {
+                this.ready_queue.push(core.quit());
+            }
         }
         
         for(let i=0;i<this.cores.length;++i)

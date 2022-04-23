@@ -141,6 +141,8 @@ const app = new Vue({
 
         scheduler: new FcfsScheduler(), // 스케쥴링을 진행하는 개체
         cores : [new PCore()], // 코어 개체
+
+        
     },
     watch:{
         total_cores : function(hook)
@@ -198,7 +200,8 @@ const app = new Vue({
         core_height()
         {
             return this.gantte_height/(Number(this.total_cores)+1);
-        }
+        },
+
     }
     ,
     methods:{
@@ -254,7 +257,7 @@ const app = new Vue({
         // 슬라이더가 동작할 때 1초 마다 호출 되는 함수
         run()
         {
-            // 슬라이더가 끝에 도달하면 종료
+            // 모든 프로세스를 처리하면 종료
             if(this.scheduler.processed_num >= this.processes.length)
             {
                 this.running = 3;
@@ -311,7 +314,6 @@ const app = new Vue({
         // Process Add 를 클릭했을 때 호출되는 함수
         process_add()
         {
-            console.log(1);
             if(this.running != 0 && this.running != 3) return;
 
             this.processes.push(new Process(Number(this.arrival_time), Number(this.burst_time)));
