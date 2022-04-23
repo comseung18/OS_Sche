@@ -1,7 +1,7 @@
 function is_less_than(p1, p2)
 {
     if(p1.remain_time != p2.remain_time) return p1.remain_time < p2.remain_time;
-    return p1.arrival_time >= p2.arrival_time;
+    return p1.arrival_time < p2.arrival_time;
 }
 
 class SrtnReadyQueue extends MinHeap{
