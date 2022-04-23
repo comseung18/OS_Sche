@@ -47,6 +47,18 @@ class Scheduler
             else core.idle();
         }
     }
+    //프로세스 대기 시간
+    cal_waiting_time()
+    {
+        for(let i=0;i<this.processes.length;++i)
+        {
+            let process = this.processes[i];
+            if(process.turnaround_time == -1 && process.arrival_time <= this.now_time)
+                process.waiting_time = this.now_time+1;
+            else if(process.turnaround_time != -1)
+                process.waiting_time = process.turnaround_time - process.arrival_time;
+        }
+    }
 
     run_sec()
     {
@@ -54,6 +66,7 @@ class Scheduler
         this.push_process_to_ready_queue();
         this.dispatch_or_preemption_process_to_cores();
         this.run_core();
+        this.cal_waiting_time();
         this.now_time++;
     }
 }
