@@ -83,7 +83,7 @@
                 </div>
                 <!-- 인터벌 간격 -->
                 <form class="form-floating" id="interval_term_form">
-                    <input type="number" class="form-control" id="interval_term" v-model="interval_term" min="1" max="1000" :disabled="running == 1"/>
+                    <input type="number" class="form-control" id="interval_term" v-model="interval_term" min="0" max="1000" step="250" :disabled="running == 1"/>
                     <label for="interval_term_cores">Interval</label>
                 </form>
             </div>
@@ -92,15 +92,15 @@
                 <div id="middle-left">
                     <!-- 도착시간 -->
                     <form class="form-floating" id="arrive_time_form">
-                        <input type="number" class="form-control" id="arrive_time" v-model="arrival_time" min="0" :disabled="running != 0 && running != 3"/>
-                        <label for="arrive_time">Arrive Time</label>
+                        <input type="number" class="form-control" id="arrive_time" v-model="arrival_time" min="0" :disabled="running != 0 && running != 3" @keyup.enter.prevent="process_add"/>
+                        <label for="arrive_time">Arrival Time</label>
                     </form>
                     <!-- 실행시간 -->
                     <form class="form-floating" id="burst_time_form">
-                        <input type="number" class="form-control" id="burst_time" v-model="burst_time" min="1" :disabled="running != 0 && running != 3"/>
+                        <input type="number" class="form-control" id="burst_time" v-model="burst_time" min="1" :disabled="running != 0 && running != 3" @keyup.enter.prevent="process_add"/>
                         <label for="burst_time">Burst Time</label>
                     </form>
-                      <button type="button" class="btn btn-dark" id="process_add_btn" @click="process_add" :disabled="running != 0 && running != 3">Process Add</button>
+                      <button type="button" class="btn btn-dark" id="process_add_btn" @click="process_add" :disabled="running != 0 && running != 3">Add Process</button>
                 </div>
                 <!-- 프로세스 스케쥴링 테이블 -->
                 <div id="middle-right">
@@ -170,13 +170,13 @@
                   <tbody>
                     <tr v-for="i in Number(p_cores)">
                       <th scope="row" class="sticky_column" style="background-color: aliceblue;">Core{{i-1}}{P}</th>
-                      <td v-for="(proc, index) in cores[i-1].processed_list_until_time(Number(time))" :colspan="proc.processed_time" :style="{backgroundColor: proc.process_color, color:proc.process_complement_color}">
+                      <td v-for="(proc, index) in cores[i-1].processed_list_until_time(Number(time), Number(max_time))" :colspan="proc.processed_time" :style="{backgroundColor: proc.process_color, color:proc.process_complement_color}">
                           {{proc.process_name}}
                         </td>
                     </tr>
                     <tr v-for="i in Number(total_cores) -Number(p_cores)" >
                         <th scope="row" class="sticky_column" style="background-color: aliceblue;">Core{{i-1 + Number(p_cores)}}{E}</th>
-                        <td v-for="proc in cores[i-1+Number(p_cores)].processed_list_until_time(Number(time))" :colspan="proc.processed_time" :style="{backgroundColor: proc.process_color, color:proc.process_complement_color}">
+                        <td v-for="proc in cores[i-1+Number(p_cores)].processed_list_until_time(Number(time), Number(max_time))" :colspan="proc.processed_time" :style="{backgroundColor: proc.process_color, color:proc.process_complement_color}">
                             {{proc.process_name}}
                           </td>
                       </tr>

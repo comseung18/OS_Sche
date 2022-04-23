@@ -67,8 +67,9 @@ class Core
     }
 
     // time 값이 주어졌을 때 time 까지의 processed_list 를 반환
-    processed_list_until_time(time)
+    processed_list_until_time(time, max_time)
     {
+        if(time == max_time) return this.processed_list;
         if(time == 0) return [];
 
         let acc_time = 0;

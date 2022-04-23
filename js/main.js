@@ -1,3 +1,7 @@
+$(document).on("keydown", "form", function(event) { 
+    return event.key != "Enter";
+});
+
 // 프로세스의 도착시간 기준 오름차정렬을 할 때 사용하는 함수
 // 도착 시간 같을 경우 burst 타임 오름차 순으로 정렬
 function compare_process_arrival_time(p1, p2)
@@ -116,7 +120,7 @@ const app = new Vue({
     el : "#app",
     data:{
         max_time : 0, // 슬라이더 최종 시간, 결과 나오기 전에는 0
-        interval_term : 1000,
+        interval_term : 500,
 
         algorithm : 'FCFS', // 현재 선택된 알고리즘 방식
         quantum_time : 1, // RR 일경우 퀀텀타임
@@ -307,6 +311,7 @@ const app = new Vue({
         // Process Add 를 클릭했을 때 호출되는 함수
         process_add()
         {
+            console.log(1);
             if(this.running != 0 && this.running != 3) return;
 
             this.processes.push(new Process(Number(this.arrival_time), Number(this.burst_time)));
