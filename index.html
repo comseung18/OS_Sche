@@ -170,13 +170,13 @@
                   <tbody>
                     <tr v-for="i in Number(p_cores)">
                       <th scope="row" class="sticky_column" style="background-color: aliceblue;">Core{{i-1}}{P}</th>
-                      <td v-for="proc in cores[i-1].processed_list" :colspan="proc.processed_time" :style="{backgroundColor: proc.process_color, color:proc.process_complement_color}">
+                      <td v-for="(proc, index) in cores[i-1].processed_list_until_time(Number(time))" :colspan="proc.processed_time" :style="{backgroundColor: proc.process_color, color:proc.process_complement_color}">
                           {{proc.process_name}}
                         </td>
                     </tr>
                     <tr v-for="i in Number(total_cores) -Number(p_cores)" >
                         <th scope="row" class="sticky_column" style="background-color: aliceblue;">Core{{i-1 + Number(p_cores)}}{E}</th>
-                        <td v-for="proc in cores[i-1+Number(p_cores)].processed_list" :colspan="proc.processed_time" :style="{backgroundColor: proc.process_color, color:proc.process_complement_color}">
+                        <td v-for="proc in cores[i-1+Number(p_cores)].processed_list_until_time(Number(time))" :colspan="proc.processed_time" :style="{backgroundColor: proc.process_color, color:proc.process_complement_color}">
                             {{proc.process_name}}
                           </td>
                       </tr>

@@ -65,4 +65,37 @@ class Core
         this.process = null;
         return tmp;
     }
+
+    // time 값이 주어졌을 때 time 까지의 processed_list 를 반환
+    processed_list_until_time(time)
+    {
+        if(time == 0) return [];
+
+        let acc_time = 0;
+        let idx = 0;
+        for(idx = 0;idx<this.processed_list.length;++idx)
+        {
+            if(this.processed_list[idx].processed_time + acc_time <= time)
+            {
+                acc_time += this.processed_list[idx].processed_time;
+            }
+            else break;
+        }
+        let ret;
+        if(idx) ret = this.processed_list.slice(0, idx);
+        else ret = [];
+
+        if(idx < this.processed_list.length && acc_time < time)
+        {
+            let process = this.processed_list[idx];
+            ret.push({
+                processed_time : time -acc_time,
+                process_name : process.process_name,
+                process_color : process.process_color,
+                process_complement_color : process.process_complement_color,
+            })
+        }
+
+        return ret;
+    }
 }
