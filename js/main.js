@@ -98,7 +98,8 @@ class Process
         this.turnaround_time = -1; // 프로세스 종료시각
         this.power_consumption = 0; // 프로세스 소비전력
         this.color = generate_random_color(); // 프로세스 지정 컬러
-        this.remain_time = burst_time;
+        this.waiting_time = 0; //프로세스 대기시간
+        this.remain_time = burst_time; //프로세스 남은 실행시간
         this.complement_color = cal_complement_color(this.color); // 프로세스 지정 컬러의 보색
     }
 
@@ -115,7 +116,7 @@ const app = new Vue({
     el : "#app",
     data:{
         max_time : 0, // 슬라이더 최종 시간, 결과 나오기 전에는 0
-
+        interval_term : 1000,
 
         algorithm : 'FCFS', // 현재 선택된 알고리즘 방식
         quantum_time : 1, // RR 일경우 퀀텀타임
@@ -135,15 +136,53 @@ const app = new Vue({
         run_timer: null, // 슬라이더 진행 중이면 timer 가 대입됨
 
         scheduler: new FcfsScheduler(), // 스케쥴링을 진행하는 개체
-        cores : [new PCore(), new PCore(), new PCore(), new PCore()], // 코어 개체
+        cores : [new PCore()], // 코어 개체
     },
+    watch:{
+        total_cores : function(hook)
+        {
+            cores = [];
+            for(let i=0;i<Number(this.p_cores);++i)
+            {
+               cores.push(new PCore());
+            }
+            for(let i=0;i<Number(this.total_cores) - Number(this.p_cores);++i)
+            {
+                cores.push(new ECore());
+            }
+            this.cores = cores;
+        },
+        p_cores : function(hook)
+        {
+            cores = [];
+            for(let i=0;i<Number(this.p_cores);++i)
+            {
+               cores.push(new PCore());
+            }
+            for(let i=0;i<Number(this.total_cores) - Number(this.p_cores);++i)
+            {
+                cores.push(new ECore());
+            }
+            this.cores = cores;
+        }
+    },
+    
     computed:{
+        //프로그램 상태
         program_state()
         {
             if(this.running == 0) return "Start!";
             else if(this.running == 1) return "Running!";
             else if(this.running == 2) return "Paused!";
-            else if(this.running == 3) return "Terminated";
+            else if(this.running == 3) return "Restart?";
+        },
+
+        program_state_class()
+        {
+            if(this.running == 0) return ["btn-success"];
+            else if(this.running == 1) return ["btn-success"];
+            else if(this.running == 2) return ["btn-warning"];
+            else if(this.running == 3) return ["btn-primary"];
         },
 
         gantte_height()
@@ -176,8 +215,8 @@ const app = new Vue({
             }
             else if(this.running == 2)
             {
-                this.running = false;
-                clearInterval(this.run_timer);
+                this.running = 1;
+                this.run_timer = setInterval(this.run, Number(this.interval_term));
             }
             else if(this.running == 3)
             {
@@ -202,8 +241,10 @@ const app = new Vue({
             // 스케쥴러 생성
             if(this.algorithm == 'FCFS') this.scheduler = new FcfsScheduler(this.cores, this.processes);
             else if(this.algorithm == 'RR') this.scheduler = new RrScheduler(this.cores, this.processes, Number(this.quantum_time));
+            else if(this.algorithm == 'SPN') this.scheduler = new SpnScheduler(this.cores, this.processes);
+            else if(this.algorithm == 'SRTN') this.scheduler = new SrtnScheduler(this.cores, this.processes);
 
-            this.run_timer = setInterval(this.run, 1000);
+            this.run_timer = setInterval(this.run, Number(this.interval_term));
         },
 
         // 슬라이더가 동작할 때 1초 마다 호출 되는 함수
@@ -220,20 +261,15 @@ const app = new Vue({
              // 슬라이더의 시간을 증가시키기
             this.time = this.scheduler.now_time;
             this.max_time = this.scheduler.now_time;
+
+            let gatte = document.getElementById('bottom-gantt-chart');
+            gatte.scrollLeft = gatte.scrollWidth;
         },
 
         // RESET 버튼이 클릭되면 호출되는 함수
         reset()
         {
             this.reset_for_restart();
-            this.algorithm = 'FCFS';
-            this.quantum_time = 1;
-            this.total_cores = 1;
-            this.p_cores = 1;
-            this.arrival_time = 0;
-            this.burst_time = 1;
-            
-            this.processes = [];
         },
 
         reset_for_restart()
@@ -243,12 +279,14 @@ const app = new Vue({
             if(this.run_timer) clearInterval(this.run_timer);
 
             this.scheduler = new FcfsScheduler(); // 스케쥴링을 진행하는 개체
-            this.cores = [new PCore(), new PCore(), new PCore(), new PCore()]; // 코어 개체
-
             for(let i=0;i<this.processes.length;++i)
             {
                 let proc = this.processes[i];
                 proc.reset();
+            }
+            for(let i=0;i<this.cores.length;++i)
+            {
+                this.cores[i].processed_list = [];
             }
         },
 
@@ -277,7 +315,7 @@ const app = new Vue({
             this.processes.sort(compare_process_arrival_time);
             this.process_naming();
         },
-
+        //프로세스 네이밍(p1, p2, ...)
         process_naming()
         {
             for(let i=0;i<this.processes.length;++i)
