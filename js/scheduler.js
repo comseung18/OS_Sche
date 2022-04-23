@@ -47,7 +47,7 @@ class Scheduler
             else core.idle();
         }
     }
-    //프로세스 대기 시간
+    //프로세스 대기 시간 갱신
     cal_waiting_time()
     {
         for(let i=0;i<this.processes.length;++i)
@@ -60,6 +60,12 @@ class Scheduler
         }
     }
 
+    // 레디큐에 대한 스냅샷 저장
+    ready_queue_save()
+    {
+        this.ready_queue.snapshot_add();
+    }
+
     run_sec()
     {
         // 1초 만큼 스케쥴링한다.
@@ -67,6 +73,7 @@ class Scheduler
         this.dispatch_or_preemption_process_to_cores();
         this.run_core();
         this.cal_waiting_time();
+        this.ready_queue_save();
         this.now_time++;
     }
 }

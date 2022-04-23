@@ -151,7 +151,7 @@
                     <!-- 레디큐 --></div>
                     <div id="ready-queue">
                         <p><strong>&lt;Ready Queue&gt;</strong></p>
-                        <div v-if="scheduler && scheduler.ready_queue" v-for="process in scheduler.ready_queue.list()" class="process_in_queue"
+                        <div v-if="scheduler && scheduler.ready_queue" v-for="process in scheduler.ready_queue.snapshot(Number(time))" class="process_in_queue"
                         :style="{backgroundColor: process.color, color:process.complement_color}">
                             <span>{{process.name}}</span>
                         </div>

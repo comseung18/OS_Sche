@@ -113,6 +113,16 @@ class Process
         this.remain_time = this.burst_time;
         this.power_consumption = 0;
     }
+
+    // 레디큐 스냅샷 저장용 딥카피
+    copy()
+    {
+        let ret = new Process(0, 0);
+        ret.name = this.name;
+        ret.color = this.color;
+        ret.complement_color = this.complement_color;
+        return ret;
+    }
 }
 
 // 뷰 객체
