@@ -4,10 +4,10 @@ function compare_process_arrival_time(p1, p2)
 {
     x = Number(p1.arrival_time);
     y = Number(p2.arrival_time);
-    if( x != y)
+    if(x != y)
     {
         if(x < y) return -1;
-        else if(x==y) return 0;
+        else if(x == y) return 0;
         return 1;
     }
     x = Number(p1.burst_time);
@@ -54,7 +54,7 @@ function compare_process_arrival_time(p1, p2)
 
 ////////////////////////////////////////////
 // 현재 시간을 time 이라고 하자.
-// 1. arrival time <= time 인 프로세르르 레디큐에 push 한다.
+// 1. arrival time <= time 인 프로세스를 레디큐에 push 한다.
 // 2. 프로세스가 코어가 할당되거나 선점된다.
 // 2-1. 일할 수 있는 프로세서가 없으면? 2과정은 생략
 // 3. 코어가 일을 한다.
@@ -135,7 +135,7 @@ const app = new Vue({
         run_timer: null, // 슬라이더 진행 중이면 timer 가 대입됨
 
         scheduler: new FcfsScheduler(), // 스케쥴링을 진행하는 개체
-        cores : null, // 코어 개체
+        cores : [new PCore(), new PCore(), new PCore(), new PCore()], // 코어 개체
     },
     computed:{
         program_state()
@@ -144,6 +144,17 @@ const app = new Vue({
             else if(this.running == 1) return "Running!";
             else if(this.running == 2) return "Paused!";
             else if(this.running == 3) return "Terminated";
+        },
+
+        gantte_height()
+        {
+            return document.getElementById("bottom-gantt-chart").clientHeight;
+        },
+
+        // css 에서 각 코어의 높이
+        core_height()
+        {
+            return this.gantte_height/(Number(this.total_cores)+1);
         }
     }
     ,
@@ -190,7 +201,7 @@ const app = new Vue({
             }
             // 스케쥴러 생성
             if(this.algorithm == 'FCFS') this.scheduler = new FcfsScheduler(this.cores, this.processes);
-            else if(this.algorithm == 'RR') {}
+            else if(this.algorithm == 'RR') this.scheduler = new RrScheduler(this.cores, this.processes, Number(this.quantum_time));
 
             this.run_timer = setInterval(this.run, 1000);
         },
@@ -232,7 +243,7 @@ const app = new Vue({
             if(this.run_timer) clearInterval(this.run_timer);
 
             this.scheduler = new FcfsScheduler(); // 스케쥴링을 진행하는 개체
-            this.cores = null; // 코어 개체
+            this.cores = [new PCore(), new PCore(), new PCore(), new PCore()]; // 코어 개체
 
             for(let i=0;i<this.processes.length;++i)
             {

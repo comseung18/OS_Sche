@@ -13,9 +13,9 @@
         <script src="js/ready_queue.js"></script>
         <script src="js/fcfs_ready_queue.js"></script>
 
-        <script src="js/schedule.js"></script>
-        <script src="js/fcfs_schdule.js"></script>
-
+        <script src="js/scheduler.js"></script>
+        <script src="js/fcfs_schduler.js"></script>
+        <script src="js/rr_schduler.js"></script>
 
 
         <script src="js/vue.min.js"></script>
@@ -27,7 +27,9 @@
         <link rel="stylesheet" href="css/middle_left.css">
         <link rel="stylesheet" href="css/middle_right.css">
         <link rel="stylesheet" href="css/bottom_ready_queue.css">
+        <link rel="stylesheet" href="css/bottom_gantte_chart.css">
         <link rel="stylesheet" href="css/bottom_result.css">
+        <link rel ="shortcut icon" type="image/x-icon" href="img/favicon.ico">
         <style>
             /* div
             {
@@ -136,10 +138,32 @@
                     </div>
 
                 </div>
+
                 <div id="bottom-gantt-chart">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col" class="sticky_column" style="background-color: aliceblue;">Time(sec)</th>
+                      <th v-for="i in (Number(time)+1)" scope="col">{{i-1}}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="i in Number(p_cores)">
+                      <th scope="row" class="sticky_column" style="background-color: aliceblue;">Core{{i-1}}{P}</th>
+                      <td v-for="proc in cores[i-1].processed_list" :colspan="proc.processed_time" :style="{backgroundColor: proc.process_color, color:proc.process_complement_color}">
+                          {{proc.process_name}}
+                        </td>
+                    </tr>
+                    <tr v-for="i in Number(total_cores) -Number(p_cores)" style="background-color: aliceblue;">
+                        <th scope="row" class="sticky_column">Core{{i-1 + Number(p_cores)}}{E}</th>
+                        <td v-for="proc in cores[i-1+Number(p_cores)].processed_list" :colspan="proc.processed_time" :style="{backgroundColor: proc.process_color, color:proc.process_complement_color}">
+                            {{proc.process_name}}
+                          </td>
+                      </tr>
+                  </tbody>
+                </table>
 
                 </div>
-
 
                 <div id="bottom-result-table">
                     <table class="table table-light" id="result_table">
@@ -159,7 +183,7 @@
                                 <td :style="{backgroundColor: process.color, color:process.complement_color}">{{process.name}}</td>
                                 <td>{{process.arrival_time}}</td>
                                 <td>{{process.burst_time}}</td>
-                                <td>{{process.turnaround_time != -1? process.turnaround_time - process.burst_time : '-'}}</td>
+                                <td>{{process.turnaround_time != -1? process.turnaround_time - process.arrival_time : '-'}}</td>
                                 <td>{{process.turnaround_time != -1? process.turnaround_time : '-'}}</td>
                                 <td>{{process.turnaround_time != -1? process.turnaround_time / process.burst_time : '-'}}</td>
                                 <td>{{process.power_consumption}}</td>

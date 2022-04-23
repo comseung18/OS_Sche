@@ -1,0 +1,18 @@
+#bottom-gantt-chart > table
+{
+    height: 100%;
+    overflow-x: scroll;
+}
+
+#bottom-gantt-chart > table td
+{
+    text-align: center;
+    font-weight: bold;
+}
+
+#bottom-gantt-chart .sticky_column
+{
+    position: sticky;
+    left: 0;
+    width: 0;
+}
