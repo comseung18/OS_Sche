@@ -188,8 +188,8 @@ const app = new Vue({
         program_state()
         {
             if(this.running == 0) return "Start!";
-            else if(this.running == 1) return "Running!";
-            else if(this.running == 2) return "Paused!";
+            else if(this.running == 1) return "Running!/Pause?";
+            else if(this.running == 2) return "Paused!/Resume?";
             else if(this.running == 3) return "Restart?";
         },
 
@@ -260,7 +260,8 @@ const app = new Vue({
             else if(this.algorithm == 'RR') this.scheduler = new RrScheduler(this.cores, this.processes, Number(this.quantum_time));
             else if(this.algorithm == 'SPN') this.scheduler = new SpnScheduler(this.cores, this.processes);
             else if(this.algorithm == 'SRTN') this.scheduler = new SrtnScheduler(this.cores, this.processes);
-
+            else if(this.algorithm == 'HRRN') this.scheduler = new HrrnScheduler(this.cores, this.processes);
+            
             this.run_timer = setInterval(this.run, Number(this.interval_term));
         },
 
