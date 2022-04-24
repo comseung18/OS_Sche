@@ -49,9 +49,9 @@ class ReadyQueue
     }
 
     // time 시간 때의 레디 큐 상태를 반환
-    snapshot(time)
+    snapshot(time, max_time)
     {
-        // if(time == maxtime) return this.list();
+        if(time == max_time) return this.list();
         return this.time_snapshot[time];
     }
 }

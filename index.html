@@ -66,7 +66,6 @@
                 </button>
                 <!-- reset버튼 -->
                 <button type="button" class="btn btn-danger" id="btn_program_reset" @click="reset" :disabled="running != 2">RESET</button>
-                Power: {{total_cores_power_consumption.toFixed(2)}} W
                 <!-- p코어 개수 -->
                 <form class="form-floating" id="p_cores_form">
                     <input type="number" class="form-control" id="p_cores" v-model="p_cores" min="0" :max="total_cores" :disabled="running != 0 && running != 3"/>
@@ -163,7 +162,7 @@
                     <!-- 레디큐 --></div>
                     <div id="ready-queue">
                         <p><strong>&lt;Ready Queue&gt;</strong></p>
-                        <div v-if="scheduler && scheduler.ready_queue" v-for="process in scheduler.ready_queue.snapshot(Number(time))" class="process_in_queue"
+                        <div v-if="scheduler && scheduler.ready_queue" v-for="process in scheduler.ready_queue.snapshot(Number(time),Number(max_time))" class="process_in_queue"
                         :style="{backgroundColor: process.color, color:process.complement_color}">
                             <span>{{process.name}}</span>
                         </div>
@@ -181,16 +180,22 @@
                   </thead>
                   <tbody>
                     <tr v-for="i in Number(p_cores)">
-                      <th scope="row" class="sticky_column" style="background-color: aliceblue;">Core{{i-1}}{P} {{cores[i-1].total_power_consumption.toFixed(2)}} W</th>
+                      <th scope="row" class="sticky_column" style="background-color: aliceblue;">Core{{i-1}}{P}</th>
                       <td v-for="(proc, index) in cores[i-1].processed_list_until_time(Number(time), Number(max_time))" :colspan="proc.processed_time" :style="{backgroundColor: proc.process_color, color:proc.process_complement_color}">
                           {{proc.process_name}}
                         </td>
+                        <td>
+                            {{cores[i-1].total_power_consumption}} W
+                        </td>
                     </tr>
                     <tr v-for="i in Number(total_cores) -Number(p_cores)" >
-                        <th scope="row" class="sticky_column" style="background-color: aliceblue;">Core{{i-1 + Number(p_cores)}}{E} {{cores[i-1 + Number(p_cores)].total_power_consumption.toFixed(2)}} W</th>
+                        <th scope="row" class="sticky_column" style="background-color: aliceblue;">Core{{i-1 + Number(p_cores)}}{E}</th>
                         <td v-for="proc in cores[i-1+Number(p_cores)].processed_list_until_time(Number(time), Number(max_time))" :colspan="proc.processed_time" :style="{backgroundColor: proc.process_color, color:proc.process_complement_color}">
                             {{proc.process_name}}
                           </td>
+                          <td>
+                            {{cores[i-1+Number(p_cores)].total_power_consumption.toFixed(2)}} W
+                        </td>
                       </tr>
                   </tbody>
                 </table>
