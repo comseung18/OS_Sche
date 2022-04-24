@@ -2,7 +2,7 @@ class ReadyQueue
 {
     constructor()
     {
-        this.time_snapshot = [[]];
+        this.time_snapshot = [];
     }
 
     // 프로세스를 큐에 푸쉬

@@ -70,10 +70,11 @@ class Scheduler
     {
         // 1초 만큼 스케쥴링한다.
         this.push_process_to_ready_queue();
+        this.ready_queue_save();
         this.dispatch_or_preemption_process_to_cores();
+        
         this.run_core();
         this.cal_waiting_time();
-        this.ready_queue_save();
         this.now_time++;
     }
 }

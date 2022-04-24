@@ -7,12 +7,20 @@ class HrrnReadyQueue extends ReadyQueue{
 
         if(r1 != r2)
         {
-            if(r1 < r2) return -1;
+            if(r1 > r2) return -1;
             else return 1;
         }
         if(p1.arrival_time < p2.arrival_time) return -1;
         else if(p1.arrival_time > p2.arrival_time) return 1;
+
+        if(p1.burst_time < p2.burst_time) return -1;
+        else if(p1.burst_time > p2.burst_time) return 1;
         return 0;
+    }
+
+    sort()
+    {
+        this.items.sort(this.is_less_than);
     }
 
     constructor()
@@ -24,7 +32,6 @@ class HrrnReadyQueue extends ReadyQueue{
     push(process)
     {
         this.items.push(process);
-        this.items.sort(this.is_less_than);
     }
 
     pop()

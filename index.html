@@ -6,6 +6,7 @@
         <script src="js/jquery.min.js"></script>
         <script src="bootstrap/js/bootstrap.min.js"></script>
         
+        <script src="js/process.js"></script>
         <script src="js/core.js"></script>
         <script src="js/p_core.js"></script>
         <script src="js/e_core.js"></script>
@@ -48,6 +49,14 @@
         </style>
     </head>
     <body>
+        <a class="text text-primary" onclick="sample1()">sample1</a>
+        <a class="text text-primary" onclick="sample2()">sample2</a>
+        <a class="text text-primary" onclick="sample3()">sample3</a>
+        <a class="text text-primary" onclick="sample4()">sample4</a>
+        <a class="text text-primary" onclick="sample5()">sample5</a>
+        <a class="text text-primary" onclick="sample6()">sample6</a>
+        <a class="text text-primary" onclick="sample7()">sample7</a>
+        <a class="text text-primary" onclick="sample8()">sample8</a>
         <div id="app">
             <!-- header부분(start버튼, reset버튼, 알고리즘 선택, 퀀텀 타임, 토탈 코어, p코어 개수를 선택) -->
             <div id="header">
@@ -171,13 +180,13 @@
                   </thead>
                   <tbody>
                     <tr v-for="i in Number(p_cores)">
-                      <th scope="row" class="sticky_column" style="background-color: aliceblue;">Core{{i-1}}{P}</th>
+                      <th scope="row" class="sticky_column" style="background-color: aliceblue;">Core{{i-1}}{P}<br>{{cores[i-1].total_power_consumption}} W</th>
                       <td v-for="(proc, index) in cores[i-1].processed_list_until_time(Number(time), Number(max_time))" :colspan="proc.processed_time" :style="{backgroundColor: proc.process_color, color:proc.process_complement_color}">
                           {{proc.process_name}}
                         </td>
                     </tr>
                     <tr v-for="i in Number(total_cores) -Number(p_cores)" >
-                        <th scope="row" class="sticky_column" style="background-color: aliceblue;">Core{{i-1 + Number(p_cores)}}{E}</th>
+                        <th scope="row" class="sticky_column" style="background-color: aliceblue;">Core{{i-1 + Number(p_cores)}}{E}<br>{{cores[i-1 + Number(p_cores)].total_power_consumption}} W</th>
                         <td v-for="proc in cores[i-1+Number(p_cores)].processed_list_until_time(Number(time), Number(max_time))" :colspan="proc.processed_time" :style="{backgroundColor: proc.process_color, color:proc.process_complement_color}">
                             {{proc.process_name}}
                           </td>
@@ -217,4 +226,13 @@
         </div>
     </body>
     <script src="js/main.js"></script>
+    <script src="js/sample/sample1.js"></script>
+    <script src="js/sample/sample2.js"></script>
+    <script src="js/sample/sample3.js"></script>
+    <script src="js/sample/sample4.js"></script>
+    <script src="js/sample/sample5.js"></script>
+    <script src="js/sample/sample6.js"></script>
+    <script src="js/sample/sample7.js"></script>
+    <script src="js/sample/sample8.js"></script>
+
 </html>
