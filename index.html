@@ -66,6 +66,7 @@
                 </button>
                 <!-- reset버튼 -->
                 <button type="button" class="btn btn-danger" id="btn_program_reset" @click="reset" :disabled="running != 2">RESET</button>
+                Power: {{total_cores_power_consumption.toFixed(2)}} W
                 <!-- p코어 개수 -->
                 <form class="form-floating" id="p_cores_form">
                     <input type="number" class="form-control" id="p_cores" v-model="p_cores" min="0" :max="total_cores" :disabled="running != 0 && running != 3"/>
@@ -180,13 +181,13 @@
                   </thead>
                   <tbody>
                     <tr v-for="i in Number(p_cores)">
-                      <th scope="row" class="sticky_column" style="background-color: aliceblue;">Core{{i-1}}{P}<br>{{cores[i-1].total_power_consumption}} W</th>
+                      <th scope="row" class="sticky_column" style="background-color: aliceblue;">Core{{i-1}}{P}<br>{{cores[i-1].total_power_consumption.toFixed(2)}} W</th>
                       <td v-for="(proc, index) in cores[i-1].processed_list_until_time(Number(time), Number(max_time))" :colspan="proc.processed_time" :style="{backgroundColor: proc.process_color, color:proc.process_complement_color}">
                           {{proc.process_name}}
                         </td>
                     </tr>
                     <tr v-for="i in Number(total_cores) -Number(p_cores)" >
-                        <th scope="row" class="sticky_column" style="background-color: aliceblue;">Core{{i-1 + Number(p_cores)}}{E}<br>{{cores[i-1 + Number(p_cores)].total_power_consumption}} W</th>
+                        <th scope="row" class="sticky_column" style="background-color: aliceblue;">Core{{i-1 + Number(p_cores)}}{E}<br>{{cores[i-1 + Number(p_cores)].total_power_consumption.toFixed(2)}} W</th>
                         <td v-for="proc in cores[i-1+Number(p_cores)].processed_list_until_time(Number(time), Number(max_time))" :colspan="proc.processed_time" :style="{backgroundColor: proc.process_color, color:proc.process_complement_color}">
                             {{proc.process_name}}
                           </td>

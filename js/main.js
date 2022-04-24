@@ -92,6 +92,16 @@ const app = new Vue({
             return this.gantte_height/(Number(this.total_cores)+1);
         },
 
+        total_cores_power_consumption()
+        {
+            let ret = 0;
+            for(let i=0;i<this.cores.length;++i)
+            {
+                ret += this.cores[i].total_power_consumption;
+            }
+            return ret;
+        }
+
     }
     ,
     methods:{
