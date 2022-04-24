@@ -7,8 +7,8 @@ class HrrnScheduler extends Scheduler
 
     dispatch_or_preemption_process_to_cores()
     {
-        // 응답률에 대하여 정렬을 수행한다.
-        this.ready_queue.sort();
+        
+        let already_sorted = false;
 
         // Hrrn 알고리즘은 빈 코어가 있으면
         // 응답률이 가장 높은 process 를 할당하고
@@ -18,6 +18,13 @@ class HrrnScheduler extends Scheduler
             let core = this.cores[i];
             if(!core.has_process() && !this.ready_queue.empty())
             {
+                if(!already_sorted)
+                {
+                    // 응답률에 대하여 정렬을 수행한다.
+                    this.ready_queue.sort();
+                    already_sorted = true;
+                }
+                
                 core.dispatch(this.ready_queue.pop());
             }
         }
