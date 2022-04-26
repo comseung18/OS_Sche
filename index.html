@@ -185,7 +185,7 @@
                           {{proc.process_name}}
                         </td>
                         <td>
-                            {{cores[i-1].total_power_consumption}} W
+                            {{cores[i-1].total_power_consumption.toFixed(2)}} W
                         </td>
                     </tr>
                     <tr v-for="i in Number(total_cores) -Number(p_cores)" >

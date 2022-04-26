@@ -54,7 +54,7 @@ class Scheduler
         {
             let process = this.processes[i];
             if(process.turnaround_time == -1 && process.arrival_time <= this.now_time)
-                process.waiting_time = this.now_time+1;
+                process.waiting_time++;
             else if(process.turnaround_time != -1)
                 process.waiting_time = process.turnaround_time - process.arrival_time;
         }
