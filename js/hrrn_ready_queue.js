@@ -10,11 +10,14 @@ class HrrnReadyQueue extends ReadyQueue{
             if(r1 > r2) return -1;
             else return 1;
         }
+
+        if(p1.burst_time < p2.burst_time) return 1;
+        else if(p1.burst_time > p2.burst_time) return -1;
+
         if(p1.arrival_time < p2.arrival_time) return -1;
         else if(p1.arrival_time > p2.arrival_time) return 1;
 
-        if(p1.burst_time < p2.burst_time) return -1;
-        else if(p1.burst_time > p2.burst_time) return 1;
+        
         return 0;
     }
 
