@@ -40,7 +40,7 @@ class Scheduler
                     let terminated_proc = core.process;
                     core.process = null;
 
-                    terminated_proc.turnaround_time = this.now_time+1;
+                    terminated_proc.turnaround_time = this.now_time+1 - terminated_proc.arrival_time;
                     this.processed_num++;
                 }
             } 
@@ -56,7 +56,7 @@ class Scheduler
             if(process.turnaround_time == -1 && process.arrival_time <= this.now_time)
                 process.waiting_time++;
             else if(process.turnaround_time != -1)
-                process.waiting_time = process.turnaround_time - process.arrival_time;
+                process.waiting_time = process.turnaround_time - process.burst_time;
         }
     }
 
