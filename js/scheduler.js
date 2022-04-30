@@ -1,5 +1,6 @@
 class Scheduler
 {
+
     constructor(cores, processes, ready_queue)
     {
         this.now_time = 0;
@@ -21,6 +22,7 @@ class Scheduler
             }
         }
     }
+
     // 2. 프로세스가 코어에 할당되거나 선점된다.
     dispatch_or_preemption_process_to_cores()
     {
@@ -47,18 +49,6 @@ class Scheduler
             else core.idle();
         }
     }
-    //프로세스 대기 시간 갱신
-    cal_waiting_time()
-    {
-        for(let i=0;i<this.processes.length;++i)
-        {
-            let process = this.processes[i];
-            if(process.turnaround_time == -1 && process.arrival_time <= this.now_time)
-                process.waiting_time++;
-            else if(process.turnaround_time != -1)
-                process.waiting_time = process.turnaround_time - process.burst_time;
-        }
-    }
 
     // 레디큐에 대한 스냅샷 저장
     ready_queue_save()
@@ -74,7 +64,6 @@ class Scheduler
         this.dispatch_or_preemption_process_to_cores();
         
         this.run_core();
-        this.cal_waiting_time();
         this.now_time++;
     }
 }

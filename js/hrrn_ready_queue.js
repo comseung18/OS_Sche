@@ -1,9 +1,15 @@
 class HrrnReadyQueue extends ReadyQueue{
 
+    constructor()
+    {
+        super();
+        this.items = [];
+    }
+
     is_less_than(p1, p2)
     {
-        let r1 = (p1.waiting_time+p1.burst_time)/p1.burst_time;
-        let r2 = (p2.waiting_time+p2.burst_time)/p2.burst_time;
+        let r1 = (p1.hrrn_waiting_time+p1.burst_time)/p1.burst_time;
+        let r2 = (p2.hrrn_waiting_time+p2.burst_time)/p2.burst_time;
 
         if(r1 != r2)
         {
@@ -21,16 +27,18 @@ class HrrnReadyQueue extends ReadyQueue{
         return 0;
     }
 
-    sort()
+    sort(now_time)
     {
+        let tmp_list = this.list();
+        for(let i=0;i<tmp_list.length;++i)
+        {
+            let process = tmp_list[i];
+            process.hrrn_waiting_time = now_time - process.serviced_time - process.arrival_time;
+        }
         this.items.sort(this.is_less_than);
     }
 
-    constructor()
-    {
-        super();
-        this.items = [];
-    }
+    
 
     push(process)
     {

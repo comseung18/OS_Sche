@@ -16,9 +16,10 @@ class Core
         this.total_power_consumption += this.power_consumption_per_sec;
         this.process.power_consumption += this.power_consumption_per_sec;
         this.process.remain_time = Math.max(this.process.remain_time-this.work_per_sec, 0);
+        this.process.serviced_time++;
         this.processed_time++;
         this.processed_list[this.processed_list.length-1].processed_time++;
-
+        
         return this.process.remain_time == 0;
     }
     //할당된 프로세스가 없을 경우 유휴

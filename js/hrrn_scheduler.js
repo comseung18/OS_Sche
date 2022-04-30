@@ -21,7 +21,8 @@ class HrrnScheduler extends Scheduler
                 if(!already_sorted)
                 {
                     // 응답률에 대하여 정렬을 수행한다.
-                    this.ready_queue.sort();
+                    // now_time 으로 hrrn_waiting_time 을 계산함
+                    this.ready_queue.sort(this.now_time);
                     already_sorted = true;
                 }
                 

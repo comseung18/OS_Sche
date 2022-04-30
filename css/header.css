@@ -3,6 +3,7 @@
     height: 100%;
     width: 14%;
 }
+
 #btn_program_reset
 {
     height: 100%;
@@ -11,7 +12,7 @@
 
 #algorithm_div
 {
-    width: 10%;
+    width: 13%;
     height: 100%;
     float: right;
 }
@@ -20,6 +21,14 @@
 {
     text-align: center;
     height: 100%;
+}
+
+#first_core_div
+{
+    width: 10%;
+    height: 100%;
+    float: right;
+    text-align: center;
 }
 
 #interval_term_form
@@ -37,7 +46,7 @@
 
 #total_cores_form
 {
-    width: 15%;
+    width: 10%;
     height: 100%;
     float: right;
 }
@@ -50,7 +59,7 @@
 
 #p_cores_form
 {
-    width: 15%;
+    width: 10%;
     height: 100%;
     float: right;
 }
@@ -63,7 +72,7 @@
 
 #quantum_time_form
 {
-    width: 15%;
+    width: 10%;
     height: 100%;
     float: right;
 }

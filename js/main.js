@@ -32,32 +32,52 @@ const app = new Vue({
         scheduler: new FcfsScheduler(), // 스케쥴링을 진행하는 개체
         cores : [new ECore()], // 코어 개체
 
-        
+        is_p_core_first : false, // 빈 코어가 여러개 일 때 P 와 E 코어 둘 중 어느코어를 우선할지
     },
     watch:{
         total_cores : function(hook)
         {
             cores = [];
-            for(let i=0;i<Number(this.p_cores);++i)
+            if(this.is_p_core_first)
             {
-               cores.push(new PCore());
+                for(let i=0;i<Number(this.p_cores);++i)
+                {
+                    cores.push(new PCore());
+                }
             }
             for(let i=0;i<Number(this.total_cores) - Number(this.p_cores);++i)
             {
                 cores.push(new ECore());
+            }
+            if(!this.is_p_core_first)
+            {
+                for(let i=0;i<Number(this.p_cores);++i)
+                {
+                    cores.push(new PCore());
+                }
             }
             this.cores = cores;
         },
         p_cores : function(hook)
         {
             cores = [];
-            for(let i=0;i<Number(this.p_cores);++i)
+            if(this.is_p_core_first)
             {
-               cores.push(new PCore());
+                for(let i=0;i<Number(this.p_cores);++i)
+                {
+                    cores.push(new PCore());
+                }
             }
             for(let i=0;i<Number(this.total_cores) - Number(this.p_cores);++i)
             {
                 cores.push(new ECore());
+            }
+            if(!this.is_p_core_first)
+            {
+                for(let i=0;i<Number(this.p_cores);++i)
+                {
+                    cores.push(new PCore());
+                }
             }
             this.cores = cores;
         }
@@ -84,12 +104,6 @@ const app = new Vue({
         gantte_height()
         {
             return document.getElementById("bottom-gantt-chart").clientHeight;
-        },
-
-        // css 에서 각 코어의 높이
-        core_height()
-        {
-            return this.gantte_height/(Number(this.total_cores)+1);
         },
 
         total_cores_power_consumption()
@@ -137,13 +151,23 @@ const app = new Vue({
         {
             this.cores = [];
             // 코어 생성
-            for(let i=0;i<Number(this.p_cores);++i)
+            if(this.is_p_core_first)
             {
-                this.cores.push(new PCore());
+                for(let i=0;i<Number(this.p_cores);++i)
+                {
+                    this.cores.push(new PCore());
+                }
             }
             for(let i=0;i<Number(this.total_cores) - Number(this.p_cores);++i)
             {
                 this.cores.push(new ECore());
+            }
+            if(!this.is_p_core_first)
+            {
+                for(let i=0;i<Number(this.p_cores);++i)
+                {
+                    this.cores.push(new PCore());
+                }
             }
             // 스케쥴러 생성
             if(this.algorithm == 'FCFS') this.scheduler = new FcfsScheduler(this.cores, this.processes);
@@ -201,6 +225,7 @@ const app = new Vue({
         // 프로세스 테이블 리셋버튼이 클릭되면 호출되는 함수
         only_table_reset()
         {
+            if(this.running != 0 && this.running != 3) return;
             this.processes = [];
         },
 
@@ -216,13 +241,19 @@ const app = new Vue({
         process_add()
         {
             if(this.running != 0 && this.running != 3) return;
-
-            this.processes.push(new Process(Number(this.arrival_time), Number(this.burst_time)));
+            this.process_add_by_param(Number(this.arrival_time), Number(this.burst_time));
             this.arrival_time = 0;
             this.burst_time = 1;
+        },
+
+        process_add_by_param(arrival_time, burst_time)
+        {
+            if(this.running != 0 && this.running != 3) return;
+            this.processes.push(new Process(arrival_time, burst_time));
             this.processes.sort(compare_process_arrival_time);
             this.process_naming();
         },
+
         //프로세스 네이밍(p1, p2, ...)
         process_naming()
         {
@@ -231,6 +262,6 @@ const app = new Vue({
                 let process = this.processes[i];
                 process.name = "P" + (i+1);
             }
-        }
+        },
     }
 });

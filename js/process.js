@@ -47,9 +47,14 @@ class Process
         this.turnaround_time = -1; // 프로세스 종료시각
         this.power_consumption = 0; // 프로세스 소비전력
         this.color = generate_random_color(); // 프로세스 지정 컬러
-        this.waiting_time = 0; //프로세스 대기시간
         this.remain_time = burst_time; //프로세스 남은 실행시간
+        this.serviced_time = 0; // 서비스 받은 시간
         this.complement_color = cal_complement_color(this.color); // 프로세스 지정 컬러의 보색
+    }
+
+    get waiting_time()
+    {
+        return this.turnaround_time - this.serviced_time;
     }
 
     reset()
@@ -57,7 +62,7 @@ class Process
         this.turnaround_time = -1;
         this.remain_time = this.burst_time;
         this.power_consumption = 0;
-        this.waiting_time =0;
+        this.serviced_time = 0; // 서비스 받은 시간
     }
 
     // 레디큐 스냅샷 저장용 딥카피

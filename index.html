@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
     <head>
         <meta charset="utf-8" />
         <title>프로세스 스케쥴링 시뮬레이터</title>
@@ -36,6 +36,8 @@
         <link rel="stylesheet" href="css/bottom_ready_queue.css">
         <link rel="stylesheet" href="css/bottom_gantte_chart.css">
         <link rel="stylesheet" href="css/bottom_result.css">
+
+        <link rel="stylesheet" href="css/sample_btn.css">
         <link rel ="shortcut icon" type="image/x-icon" href="img/favicon.ico">
         <style>
             /* div
@@ -49,14 +51,14 @@
         </style>
     </head>
     <body>
-        <a class="text text-primary" onclick="sample1()">sample1</a>
-        <a class="text text-primary" onclick="sample2()">sample2</a>
-        <a class="text text-primary" onclick="sample3()">sample3</a>
-        <a class="text text-primary" onclick="sample4()">sample4</a>
-        <a class="text text-primary" onclick="sample5()">sample5</a>
-        <a class="text text-primary" onclick="sample6()">sample6</a>
-        <a class="text text-primary" onclick="sample7()">sample7</a>
-        <a class="text text-primary" onclick="sample8()">sample8</a>
+        <a class="btn btn-primary btn-sm" onclick="sample1()" id="sample1">sample1</a>
+        <a class="btn btn-primary btn-sm" onclick="sample2()" id="sample2">sample2</a>
+        <a class="btn btn-primary btn-sm" onclick="sample3()" id="sample3">sample3</a>
+        <a class="btn btn-primary btn-sm" onclick="sample4()" id="sample4">sample4</a>
+        <a class="btn btn-primary btn-sm" onclick="sample5()" id="sample5">sample5</a>
+        <a class="btn btn-primary btn-sm" onclick="sample6()" id="sample6">sample6</a>
+        <a class="btn btn-primary btn-sm" onclick="sample7()" id="sample7">sample7</a>
+        <a class="btn btn-primary btn-sm" onclick="sample8()" id="sample8">Random Sample</a>
         <div id="app">
             <!-- header부분(start버튼, reset버튼, 알고리즘 선택, 퀀텀 타임, 토탈 코어, p코어 개수를 선택) -->
             <div id="header">
@@ -89,6 +91,9 @@
                       <option value="SPN">SPN</option>
                       <option value="SRTN">SRTN</option>
                       <option value="HRRN">HRRN</option>
+                      <option value="HRRN">YOSA_BF</option>
+                      <option value="HRRN">YOSA_DP</option>
+                      <option value="HRRN">YOSA_APPROX.</option>
                     </select>
                     <label for="algorithm_floatingSelect">Algorithm</label>
                 </div>
@@ -97,6 +102,11 @@
                     <input type="number" class="form-control" id="interval_term" v-model="interval_term" min="0" max="1000" step="250" :disabled="running == 1"/>
                     <label for="interval_term_cores">Interval</label>
                 </form>
+
+                <!-- 우선 코어 선택-->
+                <button type="button" class="btn btn-secondary" id="first_core_div" @click="is_p_core_first = !is_p_core_first" :disabled="running != 0 && running != 3">{{is_p_core_first? "P First" : "E First"}}</button>
+
+
             </div>
             <!-- middle부분(도착시간, 실행시간, 프로세스 스케쥴링 테이블) -->
             <div id="middle">
@@ -179,22 +189,54 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="i in Number(p_cores)">
+                    
+                    <tr v-if="is_p_core_first" v-for="i in Number(p_cores)">
                       <th scope="row" class="sticky_column" style="background-color: aliceblue;">Core{{i-1}}{P}</th>
                       <td v-for="(proc, index) in cores[i-1].processed_list_until_time(Number(time), Number(max_time))" :colspan="proc.processed_time" :style="{backgroundColor: proc.process_color, color:proc.process_complement_color}">
                           {{proc.process_name}}
                         </td>
                         <td>
-                            {{cores[i-1].total_power_consumption.toFixed(2)}} W
+                            {{cores[i-1].total_power_consumption.toFixed(1)}}W
+                        </td>
+                        <td v-if="Number(p_cores) && i == 1" :rowspan="cores.length">
+                            {{total_cores_power_consumption.toFixed(1)}}W
                         </td>
                     </tr>
-                    <tr v-for="i in Number(total_cores) -Number(p_cores)" >
+                    <tr v-if="is_p_core_first" v-for="i in Number(total_cores) -Number(p_cores)" >
                         <th scope="row" class="sticky_column" style="background-color: aliceblue;">Core{{i-1 + Number(p_cores)}}{E}</th>
                         <td v-for="proc in cores[i-1+Number(p_cores)].processed_list_until_time(Number(time), Number(max_time))" :colspan="proc.processed_time" :style="{backgroundColor: proc.process_color, color:proc.process_complement_color}">
                             {{proc.process_name}}
                           </td>
                           <td>
-                            {{cores[i-1+Number(p_cores)].total_power_consumption.toFixed(2)}} W
+                            {{cores[i-1+Number(p_cores)].total_power_consumption.toFixed(1)}}W
+                        </td>
+                        <td v-if="Number(p_cores) == 0 && i == 1" :rowspan="cores.length">
+                            {{total_cores_power_consumption.toFixed(1)}}W
+                        </td>
+                    </tr>
+
+                    <tr v-if="!is_p_core_first" v-for="i in Number(total_cores) -Number(p_cores)">
+                        <th scope="row" class="sticky_column" style="background-color: aliceblue;">Core{{i-1}}{E}</th>
+                        <td v-for="(proc, index) in cores[i-1].processed_list_until_time(Number(time), Number(max_time))" :colspan="proc.processed_time" :style="{backgroundColor: proc.process_color, color:proc.process_complement_color}">
+                            {{proc.process_name}}
+                          </td>
+                          <td>
+                              {{cores[i-1].total_power_consumption.toFixed(1)}}W
+                          </td>
+                          <td v-if="(Number(total_cores) -Number(p_cores)) && i == 1" :rowspan="cores.length">
+                            {{total_cores_power_consumption.toFixed(1)}}W
+                        </td>
+                      </tr>
+                      <tr v-if="!is_p_core_first" v-for="i in Number(p_cores)" >
+                          <th scope="row" class="sticky_column" style="background-color: aliceblue;">Core{{i-1 + Number(total_cores) -Number(p_cores)}}{P}</th>
+                          <td v-for="proc in cores[i-1+Number(total_cores) -Number(p_cores)].processed_list_until_time(Number(time), Number(max_time))" :colspan="proc.processed_time" :style="{backgroundColor: proc.process_color, color:proc.process_complement_color}">
+                              {{proc.process_name}}
+                            </td>
+                            <td>
+                              {{cores[i-1+Number(total_cores) -Number(p_cores)].total_power_consumption.toFixed(1)}}W
+                          </td>
+                          <td v-if="(Number(total_cores) -Number(p_cores))==0 && i == 1" :rowspan="cores.length">
+                            {{total_cores_power_consumption.toFixed(1)}}W
                         </td>
                       </tr>
                   </tbody>
@@ -220,9 +262,9 @@
                                 <td :style="{backgroundColor: process.color, color:process.complement_color}">{{process.name}}</td>
                                 <td>{{process.arrival_time}}</td>
                                 <td>{{process.burst_time}}</td>
-                                <td>{{process.waiting_time}}</td>
+                                <td>{{process.turnaround_time != -1? process.waiting_time : '-'}}</td>
                                 <td>{{process.turnaround_time != -1? process.turnaround_time : '-'}}</td>
-                                <td>{{process.turnaround_time != -1? process.turnaround_time / process.burst_time : '-'}}</td>
+                                <td>{{process.turnaround_time != -1? (process.turnaround_time / process.burst_time).toFixed(3) : '-'}}</td>
                                 <td>{{process.power_consumption}}</td>
                             </tr>
                         </tbody>
@@ -240,5 +282,5 @@
     <script src="js/sample/sample6.js"></script>
     <script src="js/sample/sample7.js"></script>
     <script src="js/sample/sample8.js"></script>
-
+    <script src="js/sample/smaple_btn_click.js"></script>
 </html>
