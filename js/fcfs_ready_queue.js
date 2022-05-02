@@ -21,6 +21,14 @@ class FcfsReadyQueue extends ReadyQueue
         return tmp;
     }
 
+    // idx 위치에 있는 프로세스를 뽑아서 반환
+    pop_idx(idx)
+    {
+        let tmp = this.queue[idx];
+        this.queue.splice(idx, 1);
+        return tmp;
+    }
+
     // 가장 앞에 있는 프로세스를 보여줌.
     peek()
     {

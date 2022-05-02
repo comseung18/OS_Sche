@@ -1,6 +1,7 @@
 #arrive_time_form
 {
-    width: 100%;
+    float: right;
+    width: 70%;
     height: 35%;
 }
 #arrive_time_form input
@@ -8,9 +9,25 @@
     text-align: center;
     height: 100%;
 }
+
+#deadline_form
+{
+    float: right;
+    width: 30%;
+    height: 70%;
+}
+#deadline_form input
+{
+    text-align: center;
+    height: 100%;
+}
+
+
+
 #burst_time_form
 {
-    width: 100%;
+    float: right;
+    width: 70%;
     height: 35%;
 }
 #burst_time_form input

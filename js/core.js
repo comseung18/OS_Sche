@@ -3,12 +3,21 @@ class Core
     constructor(power_consumption_per_sec, work_per_sec)
     {
         this.power_consumption_per_sec = power_consumption_per_sec; //코어의 전력 소비량
+        this.idle_power_consumption = 0.1; // 대기전력 P 와 E 가 동일하므로 여기 명시하자.
         this.work_per_sec = work_per_sec; //코어가 초당 실행할 수 있는 일의 양
         this.process = null; // 프로세스가 선점 중인 프로세스
         this.total_power_consumption = 0; //현재까지 총 전력 소비량
         this.processed_time = 0; //할당된 프로세스를 연속으로 처리한 시간
 
         this.processed_list = []; // 지금 까지 처리한 프로세스의 목록. 간트차트 출력용
+    
+        // YOSA 수행용으로 코어마다 사용한 전기세를 추적한다.
+        this.elec_cost = 0;
+        // YOSA 수행용 현재 날짜를 코어마다 추적
+        // 코어 마다 추적하는 것은 불필요하며 스케쥴러의 time 을 활용하면 되기는 하나
+        // 간단한 구현을 위해서.
+        this.day = 0;
+
     }
     //할당된 프로세스를 수행
     work()
@@ -20,11 +29,17 @@ class Core
         this.processed_time++;
         this.processed_list[this.processed_list.length-1].processed_time++;
         
+
+        // YOSA
+        this.elec_cost += electricity_cost(this.day, this.power_consumption_per_sec);
+        ++this.day;
+
         return this.process.remain_time == 0;
     }
     //할당된 프로세스가 없을 경우 유휴
     idle()
     {
+        // 간트 차트에 빈 칸을 넣어주기 위해.
         if(this.processed_list.length == 0 || this.processed_list[this.processed_list.length-1].process_name != "")
         {
             this.processed_list.push({
@@ -36,7 +51,13 @@ class Core
         }
         this.processed_list[this.processed_list.length-1].processed_time++;
 
-        this.total_power_consumption += 0.1;
+        this.total_power_consumption += this.idle_power_consumption;
+
+        // YOSA
+        this.elec_cost += electricity_cost(this.day, this.idle_power_consumption);
+        ++this.day;
+
+        return;
     }
     //코어 프로세스를 할당
     dispatch(process)

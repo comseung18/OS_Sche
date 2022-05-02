@@ -8,6 +8,7 @@ function sample8()
         
         var j = Math.round(Math.random()*30);
         var k = Math.round(Math.random()*(30-1)+1);
-        app.process_add_by_param(j,k);
+        var dead = j + k + Math.round(Math.random()*k)+1;
+        app.process_add_by_param(j,k, dead);
     }
 }

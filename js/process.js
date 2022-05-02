@@ -39,7 +39,7 @@ function cal_complement_color(color)
 // 프로세스에 대해 추상화
 class Process
 {
-    constructor(arrival_time, burst_time)
+    constructor(arrival_time, burst_time, deadline =0)
     {
         this.name = "";
         this.arrival_time = arrival_time; // 프로세스 도착시각
@@ -50,6 +50,7 @@ class Process
         this.remain_time = burst_time; //프로세스 남은 실행시간
         this.serviced_time = 0; // 서비스 받은 시간
         this.complement_color = cal_complement_color(this.color); // 프로세스 지정 컬러의 보색
+        this.deadline = deadline;
     }
 
     get waiting_time()

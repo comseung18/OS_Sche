@@ -15,6 +15,7 @@ const app = new Vue({
         algorithm : 'FCFS', // 현재 선택된 알고리즘 방식
         quantum_time : 1, // RR 일경우 퀀텀타임
         total_cores : 1, // 총 코어의 개수
+        deadline : 0,
         p_cores : 0, // 총 코어 중 p 코어의 개수
 
 
@@ -175,6 +176,7 @@ const app = new Vue({
             else if(this.algorithm == 'SPN') this.scheduler = new SpnScheduler(this.cores, this.processes);
             else if(this.algorithm == 'SRTN') this.scheduler = new SrtnScheduler(this.cores, this.processes);
             else if(this.algorithm == 'HRRN') this.scheduler = new HrrnScheduler(this.cores, this.processes);
+            else if(this.algorithm == 'YOSA_BF') this.scheduler = new YosaBfScheduler(this.cores, this.processes);
 
             this.run_timer = setInterval(this.run, Number(this.interval_term));
         },
@@ -246,10 +248,10 @@ const app = new Vue({
             this.burst_time = 1;
         },
 
-        process_add_by_param(arrival_time, burst_time)
+        process_add_by_param(arrival_time, burst_time, deadline=0)
         {
             if(this.running != 0 && this.running != 3) return;
-            this.processes.push(new Process(arrival_time, burst_time));
+            this.processes.push(new Process(arrival_time, burst_time, deadline));
             this.processes.sort(compare_process_arrival_time);
             this.process_naming();
         },
