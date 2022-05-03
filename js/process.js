@@ -39,7 +39,7 @@ function cal_complement_color(color)
 // 프로세스에 대해 추상화
 class Process
 {
-    constructor(arrival_time, burst_time, deadline =0)
+    constructor(arrival_time, burst_time, deadline =Number.MAX_SAFE_INTEGER)
     {
         this.name = "";
         this.arrival_time = arrival_time; // 프로세스 도착시각
@@ -56,6 +56,11 @@ class Process
     get waiting_time()
     {
         return this.turnaround_time - this.serviced_time;
+    }
+
+    urgent_ratio_func(time)
+    {
+        return (this.deadline-time)/this.remain_time;
     }
 
     reset()

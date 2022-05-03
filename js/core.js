@@ -11,12 +11,7 @@ class Core
 
         this.processed_list = []; // 지금 까지 처리한 프로세스의 목록. 간트차트 출력용
     
-        // YOSA 수행용으로 코어마다 사용한 전기세를 추적한다.
-        this.elec_cost = 0;
-        // YOSA 수행용 현재 날짜를 코어마다 추적
-        // 코어 마다 추적하는 것은 불필요하며 스케쥴러의 time 을 활용하면 되기는 하나
-        // 간단한 구현을 위해서.
-        this.day = 0;
+
 
     }
     //할당된 프로세스를 수행
@@ -30,9 +25,6 @@ class Core
         this.processed_list[this.processed_list.length-1].processed_time++;
         
 
-        // YOSA
-        this.elec_cost += electricity_cost(this.day, this.power_consumption_per_sec);
-        ++this.day;
 
         return this.process.remain_time == 0;
     }
@@ -52,10 +44,6 @@ class Core
         this.processed_list[this.processed_list.length-1].processed_time++;
 
         this.total_power_consumption += this.idle_power_consumption;
-
-        // YOSA
-        this.elec_cost += electricity_cost(this.day, this.idle_power_consumption);
-        ++this.day;
 
         return;
     }

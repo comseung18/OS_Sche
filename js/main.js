@@ -177,6 +177,7 @@ const app = new Vue({
             else if(this.algorithm == 'SRTN') this.scheduler = new SrtnScheduler(this.cores, this.processes);
             else if(this.algorithm == 'HRRN') this.scheduler = new HrrnScheduler(this.cores, this.processes);
             else if(this.algorithm == 'YOSA_BF') this.scheduler = new YosaBfScheduler(this.cores, this.processes);
+            else if(this.algorithm == 'YOSA_UPN') this.scheduler = new UpnScheduler(this.cores, this.processes);
 
             this.run_timer = setInterval(this.run, Number(this.interval_term));
         },
@@ -243,12 +244,12 @@ const app = new Vue({
         process_add()
         {
             if(this.running != 0 && this.running != 3) return;
-            this.process_add_by_param(Number(this.arrival_time), Number(this.burst_time));
+            this.process_add_by_param(Number(this.arrival_time), Number(this.burst_time), Number(this.deadline));
             this.arrival_time = 0;
             this.burst_time = 1;
         },
 
-        process_add_by_param(arrival_time, burst_time, deadline=0)
+        process_add_by_param(arrival_time, burst_time, deadline=Number.MAX_SAFE_INTEGER)
         {
             if(this.running != 0 && this.running != 3) return;
             this.processes.push(new Process(arrival_time, burst_time, deadline));
