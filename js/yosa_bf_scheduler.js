@@ -63,7 +63,6 @@ class YosaBfScheduler extends Scheduler
                 watt += core.idle_power_consumption*(t_max - end_time[i]);
             }
 
-
             // 시뮬레이션 한 결과 데드라인을 더 잘 지켜졌으면?
             if(ret < this.deadline_sum || (ret == this.deadline_sum && watt < this.cost))
             {

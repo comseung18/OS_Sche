@@ -269,6 +269,7 @@
                                 <th>Turnaround Time(TT)</th>
                                 <th>Normalized TT(NTT)</th>
                                 <th>Power Consumption</th>
+                                <th v-if="algorithm.startsWith('YOSA')">DeadLine Over</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -280,6 +281,7 @@
                                 <td>{{process.turnaround_time != -1? process.turnaround_time : '-'}}</td>
                                 <td>{{process.turnaround_time != -1? (process.turnaround_time / process.burst_time).toFixed(3) : '-'}}</td>
                                 <td>{{process.power_consumption}}</td>
+                                <td v-if="algorithm.startsWith('YOSA')">{{process.dead_exceed_amount}}</td>
                             </tr>
                         </tbody>
                     </table>

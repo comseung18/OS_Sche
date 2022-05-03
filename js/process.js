@@ -44,13 +44,20 @@ class Process
         this.name = "";
         this.arrival_time = arrival_time; // 프로세스 도착시각
         this.burst_time = burst_time; // 프로세스 실행시간
-        this.turnaround_time = -1; // 프로세스 종료시각
+        this.turnaround_time = -1; // 프로세스 응답시각
         this.power_consumption = 0; // 프로세스 소비전력
         this.color = generate_random_color(); // 프로세스 지정 컬러
         this.remain_time = burst_time; //프로세스 남은 실행시간
         this.serviced_time = 0; // 서비스 받은 시간
         this.complement_color = cal_complement_color(this.color); // 프로세스 지정 컬러의 보색
         this.deadline = deadline;
+    }
+
+    // 데드라인을 얼마나 넘었는지
+    get dead_exceed_amount()
+    {
+        if(this.turnaround_time == -1) return '-';
+        return Math.max(this.arrival_time + this.turnaround_time - this.deadline, 0);
     }
 
     get waiting_time()
@@ -60,7 +67,7 @@ class Process
 
     urgent_ratio_func(time)
     {
-        return (this.deadline-time)/this.remain_time;
+        return (this.deadline-time-1)/this.remain_time;
     }
 
     reset()
