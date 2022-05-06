@@ -53,25 +53,13 @@ class MinHeap extends ReadyQueue{
     }
 
     bubbleUp(){
-        let index = this.items.length-1;
-        while(this.parent(index) !==undefined && this.parent(index) > this.items[index]){
-            this.swap(index, this.parentIndex(index));
-            index = this.parentIndex(index);
-        }
+
     }
     
     
     
     bubbleDown(){
-        let index = 0;
-        while((this.leftChild(index) !==undefined && this.leftChild(index) < this.items[index]) || (this.leftChild(index) !== undefined && this.rightChild(index) < this.items[index])){
-            let smallerIndex = this.leftChildIndex(index);
-            if(this.rightChild(index) !==undefined && this.rightChild(index) < this.items[smallerIndex]){
-                smallerIndex = this.rightChildIndex(index);
-            }
-            this.swap(index, smallerIndex);
-            index = smallerIndex;
-        }
+        
     }
 
     // 힙에 원소를 추가하는 함수
