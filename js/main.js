@@ -81,6 +81,13 @@ const app = new Vue({
                 }
             }
             this.cores = cores;
+        },
+        algorithm : function(hook)
+        {
+            if(this.algorithm == 'YOSA_EAUPN')
+            {
+                this.is_p_core_first = true;
+            }
         }
     },
     
@@ -115,8 +122,18 @@ const app = new Vue({
                 ret += this.cores[i].total_power_consumption;
             }
             return ret;
-        }
+        },
 
+        dead_sum()
+        {
+            let ret = 0;
+            for(let i=0;i<this.processes.length;++i)
+            {
+                let process = this.processes[i];
+                if(process.dead_exceed_amount != '-') ret += process.dead_exceed_amount;
+            }
+            return ret;
+        }
     }
     ,
     methods:{

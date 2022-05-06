@@ -10,7 +10,6 @@
         <script src="js/core.js"></script>
         <script src="js/p_core.js"></script>
         <script src="js/e_core.js"></script>
-        <script src="js/yosa_util.js"></script>
         
         <script src="js/ready_queue.js"></script>
         <script src="js/heapq.js"></script>
@@ -110,7 +109,7 @@
                 </form>
 
                 <!-- 우선 코어 선택-->
-                <button type="button" class="btn btn-secondary" id="first_core_div" @click="is_p_core_first = !is_p_core_first" :disabled="running != 0 && running != 3">{{is_p_core_first? "P First" : "E First"}}</button>
+                <button type="button" class="btn btn-secondary" id="first_core_div" @click="is_p_core_first = !is_p_core_first" :disabled="(running != 0 && running != 3) || algorithm=='YOSA_EAUPN' ">{{is_p_core_first? "P First" : "E First"}}</button>
 
 
             </div>
@@ -215,7 +214,7 @@
                             {{cores[i-1].total_power_consumption.toFixed(1)}}W
                         </td>
                         <td v-if="Number(p_cores) && i == 1" :rowspan="cores.length">
-                            {{total_cores_power_consumption.toFixed(1)}}W
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         </td>
                     </tr>
                     <tr v-if="is_p_core_first" v-for="i in Number(total_cores) -Number(p_cores)" >
@@ -227,7 +226,7 @@
                             {{cores[i-1+Number(p_cores)].total_power_consumption.toFixed(1)}}W
                         </td>
                         <td v-if="Number(p_cores) == 0 && i == 1" :rowspan="cores.length">
-                            {{total_cores_power_consumption.toFixed(1)}}W
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         </td>
                     </tr>
 
@@ -240,7 +239,7 @@
                               {{cores[i-1].total_power_consumption.toFixed(1)}}W
                           </td>
                           <td v-if="(Number(total_cores) -Number(p_cores)) && i == 1" :rowspan="cores.length">
-                            {{total_cores_power_consumption.toFixed(1)}}W
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         </td>
                         
                       </tr>
@@ -253,7 +252,7 @@
                               {{cores[i-1+Number(total_cores) -Number(p_cores)].total_power_consumption.toFixed(1)}}W
                           </td>
                           <td v-if="(Number(total_cores) -Number(p_cores))==0 && i == 1" :rowspan="cores.length">
-                            {{total_cores_power_consumption.toFixed(1)}}W
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         </td>
                       </tr>
                   </tbody>
@@ -285,6 +284,16 @@
                                 <td>{{process.turnaround_time != -1? (process.turnaround_time / process.burst_time).toFixed(3) : '-'}}</td>
                                 <td>{{process.power_consumption}}</td>
                                 <td v-if="algorithm.startsWith('YOSA')">{{process.dead_exceed_amount}}</td>
+                            </tr>
+
+                            <tr>
+                                <td style="color: black;">Total Power Consumption</td>
+                                <td colspan="7" style="color: black;">{{total_cores_power_consumption.toFixed(1)}}W</td>
+                            </tr>
+                            
+                            <tr v-if="algorithm.startsWith('YOSA')">
+                                <td style="color: black;">Deadline Over Sum</td>
+                                <td colspan="7" style="color: black;">{{dead_sum}}</td>
                             </tr>
                         </tbody>
                     </table>
