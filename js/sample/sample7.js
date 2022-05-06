@@ -5,7 +5,7 @@ function sample7()
     var i;
     //at: 2씩 증가, bt : 16 고정
     for(i = 0 ; i<=16 ; i=i+2){
-        app.process_add_by_param(i, 16, 0);
+        app.process_add_by_param(i, 16);
     }
 }
 
