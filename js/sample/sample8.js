@@ -6,9 +6,9 @@ function sample8()
     var i = Math.round((Math.random()*(15-3))+3);
     for(let m = 0 ; m<=i ; m=m+1){
         
-        var j = Math.round(Math.random()*30);
-        var k = Math.round(Math.random()*(30-1)+1);
-        var dead = j + k + Math.round(Math.random()*k)+1;
-        app.process_add_by_param(j,k, dead);
+        var at = Math.round(Math.random()*30);
+        var bt = Math.round(Math.random()*(30-1)+1);
+        var dead = at + Math.ceil(bt*(Math.random()*1.5 + 0.8));
+        app.process_add_by_param(at,bt, dead);
     }
 }

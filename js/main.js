@@ -178,6 +178,7 @@ const app = new Vue({
             else if(this.algorithm == 'HRRN') this.scheduler = new HrrnScheduler(this.cores, this.processes);
             else if(this.algorithm == 'YOSA_BF') this.scheduler = new YosaBfScheduler(this.cores, this.processes);
             else if(this.algorithm == 'YOSA_UPN') this.scheduler = new UpnScheduler(this.cores, this.processes);
+            else if(this.algorithm == 'YOSA_EAUPN') this.scheduler = new EaUpnScheduler(this.cores, this.processes);
 
             this.run_timer = setInterval(this.run, Number(this.interval_term));
         },

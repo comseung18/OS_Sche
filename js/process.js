@@ -69,6 +69,16 @@ class Process
     {
         return (this.deadline-time-1)/this.remain_time;
     }
+    
+    eaupn_urgent_ratio_func(time)
+    {
+        return (this.deadline-time)/this.remain_time;
+    }
+
+    demand_throughput_func(time)
+    {
+            return this.remain_time / (this.deadline-time);
+    }
 
     reset()
     {
