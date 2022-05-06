@@ -10,6 +10,7 @@ class EaUpnScheduler extends Scheduler
             if(core instanceof ECore)
                 this.e_throughput++;
         }
+        this.e_throughput += 1e-7;                   //소수점 연산의 오차 고려
         this.preferP = new EaUpnReadyQueue();
         this.preferE = new EaUpnReadyQueue();
 
