@@ -1,5 +1,5 @@
 class Core
-{
+{ 
     constructor(power_consumption_per_sec, work_per_sec)
     {
         this.power_consumption_per_sec = power_consumption_per_sec; //코어의 전력 소비량
@@ -11,8 +11,6 @@ class Core
 
         this.processed_list = []; // 지금 까지 처리한 프로세스의 목록. 간트차트 출력용
     
-
-
     }
     //할당된 프로세스를 수행
     work()
