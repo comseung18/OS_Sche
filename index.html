@@ -80,7 +80,7 @@
                 </form>
                 <!-- 토탈 코어 개수 -->
                 <form class="form-floating" id="total_cores_form">
-                    <input type="number" class="form-control" id="total_cores" v-model="total_cores" min="1" :disabled="running != 0 && running != 3"/>
+                    <input type="number" class="form-control" id="total_cores" v-model="total_cores" :min="Math.max(p_cores, 1)" :disabled="running != 0 && running != 3"/>
                     <label for="total_cores">Total Cores</label>
                 </form>
                 <!-- 퀀텀타임 -->
