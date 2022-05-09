@@ -26,8 +26,6 @@ class EaUpnScheduler extends Scheduler
         // 긴급도는 (deadline - now_time)/remain_time 이며
         // 긴급도가 작을 수록 긴급한 것이다.
         
-        //this.ready_queue.sort(this.now_time);
-        
         // Upn 알고리즘은 빈 코어가 있으면
         // 가장 긴급한 process 를 할당하고
         // 코어가 일하는 중이여도 더 급한 프로세스이면 선점한다.
@@ -39,12 +37,8 @@ class EaUpnScheduler extends Scheduler
                 this.ready_queue.push(core.quit());
             }
         }
-        // this.preferP.clear();
-        // let preferP = new TestReadyQueue();
-        // let preferE = new TestReadyQueue();
         let preferE = this.preferE;
         let preferP = this.preferP;
-        
 
         this.ready_queue.sort(this.now_time);
 
@@ -64,16 +58,6 @@ class EaUpnScheduler extends Scheduler
         let plist = preferE.list();
         for(let i=0; i<plist.length; ++i){
             E_total_demand_throughput += plist[i].demand_throughput_func(this.now_time);    //preferE에 있는 프로세스의 데드라인이 현재시간보다 작을 수 없음
-        }
-
-        for(let i=0;i<this.cores.length;++i)
-        {
-            let core = this.cores[i];
-            if(!(core instanceof ECore)) continue;
-            if(core.has_process())
-            {
-                E_total_demand_throughput += core.process.demand_throughput_func(this.now_time);
-            }
         }
         //=====================E코어 선호 프로세스들의 요구 스루풋 구하기=================================
 
